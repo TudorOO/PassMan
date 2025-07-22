@@ -26,6 +26,7 @@ class User(db.Model, UserMixin):
 
     def get_token(self, expire_sec = 300):
         serial = Serializer(current_app.config['SECRET_KEY'])
+
         return serial.dumps({'user_id': self.id})
 
     @staticmethod

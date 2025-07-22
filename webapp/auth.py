@@ -22,12 +22,12 @@ load_dotenv()
 def encrypt_aes(data):
     print("Encrypting data:" + data)
     aesgcm = AESGCM(os.getenv("AESGCM_META_KEY").encode())
-    nonce = "knmskcilrnd".encode()
+    nonce = os.getenv("AESGCM_META_NONCE").encode()
     key = aesgcm.encrypt(nonce, data.encode(), None)
     return key
 def decrypt_aes(data):
     aesgcm = AESGCM(os.getenv("AESGCM_META_KEY").encode())
-    nonce = "knmskcilrnd".encode()
+    nonce = os.getenv("AESGCM_META_NONCE").encode()
     key = aesgcm.decrypt(nonce, data, None)
     return key.decode()
 

@@ -18,6 +18,20 @@ auth = Blueprint("auth", __name__)
 load_dotenv()
 
 
+# Encrypt/Decrypt for metadata(email, name, etc.)
+def encrypt_aes(data):
+    print("Encrypting data:" + data)
+    aesgcm = AESGCM(os.getenv("AESGCM_META_KEY").encode())
+    nonce = "knmskcilrnd".encode()
+    key = aesgcm.encrypt(nonce, data.encode(), None)
+    return key
+def decrypt_aes(data):
+    aesgcm = AESGCM(os.getenv("AESGCM_META_KEY").encode())
+    nonce = "knmskcilrnd".encode()
+    key = aesgcm.decrypt(nonce, data, None)
+    return key.decode()
+
+
 # Throw password error
 def throw_pass_error(pass_check):
     if pass_check["length_error"]:
@@ -38,7 +52,7 @@ def send_mail(user):
 
     # Email message
     msg = Message(
-        "Password Reset Request", recipients=[user.email], sender="noreply@passman.com"
+        "Password Reset Request", recipients=[decrypt_aes(user.email)], sender="noreply@passman.com"
     )
     msg.body = f""" You have requested a password reset for PassMan password manager.
     To reset your password, plese follow the link below.
@@ -85,7 +99,7 @@ def verify_password(p):
     digit_error = re.search(r"\d", p) is None  # Minim o cifra
     uppercase_error = re.search(r"[A-Z]", p) is None  # Minim o litera mare
     lowercase_error = re.search(r"[a-z]", p) is None  # Minim o litera mica
-    symbol_error = re.search(r"\W_", p) is None  # Minim un simbol
+    symbol_error = re.search("~!@#$%^&*_+=}]?><|", p) is None  # Minim un simbol
 
     password_ok = not (
         length_error
@@ -122,8 +136,8 @@ def login():
         email = request.form.get("email")
         password = request.form.get("password")
         file = request.files.get("backup-file")
-
-        user = User.query.filter_by(email=email).first()
+        
+        user = User.query.filter_by(email=encrypt_aes(email)).first()
 
         if user:
             # Password Login
@@ -171,7 +185,7 @@ def register():
         pass1 = request.form.get("password1")
         pass2 = request.form.get("password2")
 
-        user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(email=encrypt_aes(email)).first()
 
         # Verify register input
         if user:  # One account per email
@@ -189,8 +203,8 @@ def register():
 
                 # Create new user
                 new_user = User(
-                    email=email,
-                    first_name=firstName,
+                    email=encrypt_aes(email),
+                    first_name=encrypt_aes(firstName),
                     password=hashpass,
                     salt=os.urandom(50),
                 )
@@ -204,8 +218,9 @@ def register():
                 backup = generate_backup_file(pass1)
 
                 # Generate backup file
+                root = os.path.realpath(__file__)[:-len(os.path.basename(__file__))]
                 with open(
-                    "/webapp/keybackups/key_"
+                    root + "keybackups/key_"
                     + str(new_user.id)
                     + ".json",
                     "w",
@@ -225,7 +240,7 @@ def register():
 def reset():
     if request.method == "POST":
         email = request.form.get("email")
-        user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(email=encrypt_aes(email)).first()
 
         if user:
             send_mail(user)

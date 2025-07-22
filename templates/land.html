@@ -14,16 +14,19 @@
 
     <h4>Why it's safe:</h4>
     <br>
-    <h5>1. The master password is never stored on the server, not even temporarily.</h5>
+    <h5>1. The server doesen't see your password ever.</h5>
     <p>This makes sure that, even if our server is breached, your passwords will still be safe.</p>
     <br>
-    <h5>2. The passwords are stored using the latest encryption technology available.</h5>
-    <p>We hash the master password with <b>Argon2id</b> and encrypt the passwords using a key derived from the master password with <b>AESGCM</b>. 
+
+    <h5>2. All data is stored using the latest encryption technology available.</h5>
+    <p>We hash the master password with <b>scrypt</b> and encrypt the passwords using a key derived from the master password(with <b>Argon2id</b>) and <b>AESGCM</b>. Your email and firstname are also stored encrypted, so a breach won't give away any personal info. 
     These technologies provide powerful protection against even the strongest attacks, such as GPU-Based ones.</p>
     <br>
+
     <h5>3. Encryption and decryption of passwords can happen either only server-side, or both client-side and server-side.</h5>
-    <p>You get to choose! Do you trust your machine more or our server more? Whichever the case, you can have it your way: minimal-knowledge or zero-knowledge!</p>
+    <p>You get to choose! By default, your data is encrypted both client-side and server-side. This provides maximum security, as the server doese't see your data even once(<b>zero-knowledge</b>). The other option, server-only encryption, makes it so that the server processes your password in plaintext for a miniscule amount of time, however it makes it way easier to setup and the tradeoff in security is not that great. Wheather you want complete security or ease of use, you can have it your way!</p>
     <br>
+
     <h5>4. No AI corners cut.</h5>
     <p>All code in this project is written and audited by hand, without AI-generated components, to ensure full transparency and control over security logic.</p>
     <br>

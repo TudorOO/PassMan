@@ -85,7 +85,7 @@ def verify_password(p):
     digit_error = re.search(r"\d", p) is None  # Minim o cifra
     uppercase_error = re.search(r"[A-Z]", p) is None  # Minim o litera mare
     lowercase_error = re.search(r"[a-z]", p) is None  # Minim o litera mica
-    symbol_error = re.search(r"\W", p) is None  # Minim un simbol
+    symbol_error = re.search(r"\W_", p) is None  # Minim un simbol
 
     password_ok = not (
         length_error
@@ -205,7 +205,7 @@ def register():
 
                 # Generate backup file
                 with open(
-                    "/home/tudor/Desktop/Projects/PassMan/webapp/keybackups/key_"
+                    "/webapp/keybackups/key_"
                     + str(new_user.id)
                     + ".json",
                     "w",

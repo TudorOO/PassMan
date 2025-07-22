@@ -2,6 +2,36 @@
 {% block title %}PassMan{% endblock %}
 {% block content %} 
 
-    <h1 class = "text-center"></h1>
+    <h1 class = "text-center">PASSMAN</h1>
+    <h3 class = "text-center">Flask-based password manager</h3>
+    <br>
+    <p>Passman password manager provides a safe way to create and store incredibly strong passwords for all of your apps.
+        It provides safety and convinience, removing the need to remember an ever-growing number of passwords, while also making sure that 
+        they are complex enough to be safe in the event of a breach.
+    </p>
 
+    <br><br>
+
+    <h4>Why it's safe:</h4>
+    <br>
+    <h5>1. The master password is stored on the server for virtually no time(or actually no time).</h5>
+    <p>This makes sure that, even if our server is breached, your passwords will still be safe.</p>
+    <br>
+    <h5>2. The passwords are stored using the latest encryotion technology available.</h5>
+    <p>We hash the master password with <b>Argon2id</b> and encrypt the passwords using a key derived from the master password with <b>AESGCM</b>. 
+    These technologies provide powerful protection against even the strongest attacks, such as GPU-Based ones.</p>
+    <br>
+    <h5>3. Encryption and Decryption of passwords can happen either only client-side, or only server-side.</h5>
+    <p>You get to choose! Do you trust your machine more or our server more? Whichever the case, you can have it your way: zero-knowledge or minimal-knowledge!</p>
+    <br>
+    <h5>4. No AI corners cut.</h5>
+    <p>Every line of code in this app has been created by a human. We believe that AI is not yet fit to handle such vulnerable data as passwords, and as such we have decided not to use it in our development process.</p>
+
+    <br><br>
+
+    <h4>How it works:</h4><br>
+    <h5>1. You make an account</h5>
+    <p>The master password you provide is encrypted using <b>Argon2id</b> and stored. In addition, a backup file is generated, which you can then download and use if you wish to login without a password later.</p>
+    <p>WARNING: While the backup file is encrypted, we do not provide any protection in the case that a nefarious actor gets a hold of it. You should store it incredibly safely, ideally in an USB or another location not connected to the internet.</p>
+    <br>
 {%endblock%}

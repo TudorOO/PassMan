@@ -1,0 +1,12 @@
+{%extends "index.html"%}
+{% block title %}PassMan{% endblock %}
+{% block content %} 
+
+    <h1 class = "text-center">Error Loading:</h1>
+    {%if code == 1%}
+        <h2 class = "text-center">No encryption password loaded, please login again!</h2>
+    {%else%}
+        <h2 class = "text-center">Unknown error</h2>
+    {%endif%}
+
+{%endblock%}

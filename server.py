@@ -18,19 +18,38 @@ mail = Mail()
 
 def create_app():
     app = Flask(__name__)
-    Talisman(app)
+    csp = {
+        'default-src': [
+            '\'self\''
+        ],
+        'style-src': [
+            '\'self\'',
+            '\'unsafe-inline\'',
+            'https://cdn.jsdelivr.net',
+            'https://stackpath.bootstrapcdn.com'
+        ],
+        'script-src': [
+            '\'self\'',
+            '\'unsafe-inline\'',
+            'https://cdn.jsdelivr.net',
+            'https://cdnjs.cloudflare.com',
+            'https://code.jquery.com',
+            'https://maxcdn.bootstrapcdn.com'
+        ],
+        'font-src': [
+            '\'self\'',
+            'https://stackpath.bootstrapcdn.com'
+        ],
+        'img-src': [
+            '\'self\'',
+            'data:'
+        ],
+        'object-src': [
+            '\'none\''
+        ]
+    }
 
-    @app.after_request
-    def apply_csp(response):
-        response.headers["Content-Security-Policy"] = (
-            "default-src 'self'; "
-            "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com; "
-            "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; "
-            "font-src 'self' https://stackpath.bootstrapcdn.com; "
-            "img-src 'self' data:; "
-            "object-src 'none'; "
-        )
-        return response
+    Talisman(app, content_security_policy=csp)
 
     app.permanent_session_lifetime = 172800
 

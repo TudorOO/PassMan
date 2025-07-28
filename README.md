@@ -53,9 +53,15 @@ cd PassMan
 
 Make a .env file in the root directory. Here’s an example:
 ```bash
-SECRET_KEY=your-secret-key
-ENCRYPTION_KEY=your-encryption-key
-DATABASE_URL=sqlite:///db.sqlite3
+SECRET_KEY=my_secret_key
+MAIL_SERVER=smtp.gmail.com
+MAIL_PORT=999
+MAIL_USERNAME=my_email@gmail.com
+MAIL_PASSWORD=my_email_password
+AESGCM_CHECK_KEY=my_aesgcm (256 bits)
+AESGCM_META_KEY=my_aesgcm_meta
+AESGCM_META_NONCE=my_aesgcm_meta_nonce
+
 ```
 3. Build the Docker image
 ```bash

@@ -1,12 +1,15 @@
 {%extends "index.html"%}
-{% block title %}Forgot Password{% endblock %}
+{% block title %}PassMan{% endblock %}
+{% block content %} 
 
-{% block content %}
-<form method = "POST">
-    <input type = "hidden" name = "csrf_token" value = "{{csrf_token()}}"/>
-    <h3 align = "center">New Password</h3>
+    <form method = "POST">
+    <input type = "hidden" id = "csrf_token" name = "csrf_token" value = "{{csrf_token()}}"/>
+    <input type = "hidden" id = "user_id" name = "user_id" value = "{{user.id}}"/>
+    <h3 align = "center">Change Master Password</h3>
+    <h5 align = "center">Will re-encrypt all passkeys</h5>
+    <h5 align = "center">All previously generated backup files will be unusable</h5>
     <div class = "form-group">
-        <label for = "password1">Password</label>
+        <label for = "password1">New Master Password</label>
         <input 
             type = "password" 
             class = "form-control" 
@@ -14,8 +17,16 @@
             placeholder="Enter password"
         >
     </div>
+
+    <b><p id = "message" style = "display: none; color: #595959; margin-bottom: 6px;margin-top: 6px;"">Password is <span id = "strength"></span></p></b>
+    <p id = "check1" style = "display: none; color: #595959; margin: 0px;">At least 8 characters</p>
+    <p id = "check2" style = "display: none; color: #595959; margin: 0px;">At least one lowercase letter(a-z)</p>
+    <p id = "check3" style = "display: none; color: #595959; margin: 0px;">At least one uppercase letter(A-Z)</p>
+    <p id = "check4" style = "display: none; color: #595959; margin: 0px;">At least one digit(0-9)</p>
+    <p id = "check5" style = "display: none; color: #595959; margin: 0px; margin-bottom: 7px">At least one special character(~!@#$%^&*_+=}]?><|)</p>
+
     <div class = "form-group">
-        <label for = "password2">Password (Confirm)</label>
+        <label for = "password2">New Master Password (Confirm)</label>
         <input 
             type = "password" 
             class = "form-control" 
@@ -23,9 +34,133 @@
             placeholder="Confirm password"
         >
     </div>
-    <br/>
-    <button type="submit" class = "btn btn-primary">Send Reset</button>
+
+    <br>
+
+    <h5>Verification</h5>
+
+    <br>
+
+    <div class = "form-group">
+        <label for = "master_password">Master Password</label>
+        <input
+            type = "password"
+            class = "form-control"
+            id = "master_password" name = "master_password"
+            placeholder = "Master Password">
+    </div>
+    <br><h6>OR</h6><br>
+    
+    <div class = "form-group">
+        <label for = "backup_file">Backup File <b>(WARNING: WILL DELETE ALL PASKEYS!)</b></label>
+        <input
+            type = "file"
+            class = "form-control"
+            id = "backup_file" name = "backup_file"
+            placeholder = "Master Password">
+    </div>
+
+    <button type="button" id  = "change_password" class = "btn btn-primary">Send Reset</button>
 </form>
 
+
+<script type = "text/javascript" src = "../static/js/cse.js"></script>
+<script type = "text/javascript" src = "../static/js/bower_components/zxcvbn/dist/zxcvbn.js"></script>
+<script type = "text/javascript" src = "../static/js/password_check.js"></script>
+
+
+<script>
+    console.log("asaaaa")
+    document.addEventListener("DOMContentLoaded", function() {
+        console.log("Event listner attached...")
+
+        window.changeMasterPassword =  async function(){
+            console.log("Changing master password...");
+            const mpassword = document.getElementById("master_password").value;
+            const password1 = document.getElementById("password1").value;
+            const password2 = document.getElementById("password2").value;
+            const csrfToken = document.getElementById("csrf_token").value;
+
+            const id = Number(document.getElementById("user_id").value);
+
+            fd = new FormData()
+            fd.append("csrf_token", csrfToken);
+
+            //Encrypt new password with new random salt
+            var salt = window.crypto.getRandomValues(new Uint8Array(12))
+            var key = await generateKey(password1, salt);
+
+            const enc1 = await encrypt(password1, key);
+            const enc2 = await encrypt(password2, key, enc1.iv);
+            const pack1 = pack(enc1.cypher);
+            const pack2 = pack(enc2.cypher);
+
+            const sentIV = pack(enc1.iv)
+            salt = pack(salt)
+
+            fd.append("pass1", pack1);
+            fd.append("pass2", pack2);
+            fd.append("iv", sentIV);
+            fd.append("salt", salt);
+
+            if(mpassword != ""){
+                //Encrypt and send old password
+                ivsalt = await get_salt_iv(EMAIL = undefined, ID = id,  TOKEN = csrfToken);
+                const msalt = ivsalt.salt;
+                const miv = ivsalt.iv;
+
+                console.log("Master password sent: " + mpassword)
+                console.log("Master salt: " + pack(msalt))
+                console.log("Master iv: " + pack(miv))
+
+                const mkey = await generateKey(mpassword, msalt);
+                var menc = await encrypt(mpassword, mkey, miv)
+                const mpack = pack(menc.cypher);
+
+                console.log("Mpacksent: " + mpack)
+
+                fd.append("master_password", mpack);
+
+                await fetch(
+                "/account/change_pass",
+                {
+                    method: "POST",
+                    body: fd,
+                }).then(response => {
+                    if(response.redirected){
+                        window.location.href = response.url;
+                    }else{
+                        response.text().then(text => {
+                            document.body.innerHTML = text;
+                        });
+                    }
+                })
+
+            }else{
+                //Send file
+
+                const fileInput = document.getElementById("backup_file").files[0];
+                fd.append("backup-file", fileInput);
+
+                await fetch( 
+                    '/account/change_pass', {
+                        method: "POST",
+                        body: fd,
+                    }
+                ).then(response => {
+                    if(response.redirected){
+                        window.location.href = response.url;
+                    }else{
+                        response.text().then(text => {
+                            document.body.innerHTML = text;
+                        });
+                    }
+                })
+
+            }
+        }
+        document.getElementById("change_password").addEventListener("click", changeMasterPassword);
+    });
+</script>
 
 {%endblock%}

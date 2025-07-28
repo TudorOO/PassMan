@@ -2,7 +2,7 @@
 {% block title %}Login{% endblock %}
 {% block content %}
 <form method = "POST" enctype = "multipart/form-data">
-    <input type = "hidden" name = "csrf_token" value = "{{csrf_token()}}"/>
+    <input type = "hidden" name = "csrf_token" id = "csrf_token" value = "{{csrf_token()}}"/>
     <h3 class = "text-center">Login</h3>
     <div class = "form-group">
         <label for = "email">Email Address</label>
@@ -24,7 +24,7 @@
     </div>
     <h4>OR</h4>
     <div class = "form-group">
-        <label for = "password">Backup Key</label>
+        <label for = "backup-file">Backup Key</label>
         <input 
             type = "file" 
             class = "form-control" 
@@ -33,9 +33,11 @@
         >
     </div>
     <br/>
-    <button type="submit" class = "btn btn-primary">Login</button>
+    <button onclick="sendLoginData()" type = "button" class = "btn btn-primary">Login</button>
     <a href = "/reset" id ="reset">Forgot Password?</a>
 </form>
 
+
+<script type = "text/javascript" src = "static/js/cse.js"></script>
 
 {%endblock%}

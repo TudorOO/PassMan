@@ -1,0 +1,22 @@
+{%extends "index.html"%}
+{% block title %}Forgot Password{% endblock %}
+
+{% block content %}
+<form method = "POST">
+    <input type = "hidden" name = "csrf_token" value = "{{csrf_token()}}"/>
+    <h3 align = "center">Two Factor Authentication</h3>
+    <div class = "form-group">
+        <label for = "email">Authenticator Code</label>
+        <input 
+            type = "text" 
+            class = "form-control" 
+            id="authCode" name="authCode" 
+            placeholder="Enter authenticator code"
+        >
+    </div>
+    <br/>
+    <button type="submit" class = "btn btn-primary">Send</button>
+</form>
+
+
+{%endblock%}

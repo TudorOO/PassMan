@@ -1,0 +1,121 @@
+{%extends "index.html"%}
+{% block title %}PassMan{% endblock %}
+{% block content %} 
+
+    <h1 class = "text-center">{{username}}</h1>
+
+    <br>
+
+    <div id = "breach_monitor">
+        <h3 class =  "text-center">Live breach monitoring</h3>
+        <div id = "Change_Button">
+            <button type = "button" id = "ShowButton" class = "btn btn-primary mx-auto d-block" onclick = "showMasterModal()">Show</button>
+        </div>
+        <h5 class = "text-center" >of your passwords have been leaked</h5>
+    </div>
+
+    <br><br>
+
+    <h4>Two-Factor Authentication(
+        {% if user.twofa %}
+            <b style = "color: green;">Enabled</b> )</h4>
+            <a href = "/account/2fa">
+                <button type = "button" class = "btn btn-primary">Deactivate Two-Factor Authentication</button>
+            </a>
+        {%else%}
+            <b style = "color: red;">Disabled</b> )</h4>
+            <a href = "/account/2fa">
+                <button type = "button" class = "btn btn-primary">Activate Two-Factor Authentication</button>
+            </a>
+        {%endif%}
+
+    <br><br>
+    
+    <h4>Change Password(Re-encrypts everything)</h4>
+    <a href = "/account/change_pass"><button type = "button" class = "btn btn-primary ">Change Master Password</button></a>
+
+
+    <script type = "text/javascript" src = "static/js/cse.js"></script>
+
+    <script>
+
+        function closeDialog(dialogID){
+            const dia = document.getElementById(dialogID);
+            dia.remove();
+        }
+
+        function addHTML(html){
+            const template = document.createElement("template");
+            template.innerHTML = html.trim();
+
+            return template.content.firstElementChild;
+
+        }
+
+        function showMasterModal(){
+            const popup = addHTML(`
+            <dialog id = "Masterdialog">
+                <button onclick = "closeDialog('Masterdialog')" type = "button">X</button>
+                <form method = "POST" style = "display: inline;">
+                    <input type = "hidden" name = "csrf_token" id = "csrf_token" value = "{{csrf_token()}}"/>
+                    <input type = "hidden" name = "user_id" id = "user_id" value = "{{user.id}}">
+                    <label for = "mpass">Master Password</label>
+                    <input
+                        type = "password"
+                        class = "form-control"
+                        id = "maspass" name = "maspass"
+                        placeholder = "Enter Master Password"
+                    >
+                    <button class = "btn btn-primary" 
+                        type = "button" 
+                        name = "submit_button" 
+                        onclick = "FetchBreachNumber()">Show</button>
+                </form>
+            </dialog>`);
+            document.body.appendChild(popup);
+            const dia = document.getElementById("Masterdialog");
+            dia.showModal();
+        }
+
+        async function FetchBreachNumber(){
+            fd = new FormData();
+            csrfToken = document.getElementById("csrf_token").value;
+            mpass = document.getElementById("maspass").value;
+            id = Number(document.getElementById("user_id").value);
+
+            //Encrypt master password
+            ivsalt = await get_salt_iv(EMAIL = undefined, ID = id,  TOKEN = csrfToken);
+            salt = ivsalt.salt;
+            iv = ivsalt.iv;
+            const key = await generateKey(mpass, salt);
+            var enc1 = await encrypt(mpass, key, iv=iv)
+            const pack1 = pack(enc1.cypher);
+
+            fd.append("csrf_token", csrfToken);
+            fd.append("mpass", pack1);
+
+            await fetch("/api/get_breach_number", {
+                method: "POST",
+                body: fd,
+            }).then(async response => {
+                closeDialog("Masterdialog");
+                const data = await response.json();
+                console.log(data)
+                var div = document.getElementById("Change_Button");
+                div.removeChild(document.getElementById("ShowButton"));
+                div.innerHTML = '<h4 class = "text-center"><b style = "color: red;">' + data.total + `</b></h4>`;
+                const container = document.getElementById("breach_monitor");
+
+                for(const [app, count] of Object.entries(data.result)){
+                    if(count == 0){
+                        const p = addHTML(`
+                        <h5 class = "text-center" style = "color: red;">Password for ${app} has been found in ${count} data breach(es). It should be reset!`);
+                        container.appendChild(p);
+                    }
+                }
+            });
+        }
+    </script>
+
+
+{%endblock%}

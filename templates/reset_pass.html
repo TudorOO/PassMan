@@ -1,27 +1,13 @@
 {%extends "index.html"%}
-{% block title %}Register{% endblock %}
+{% block title %}Forgot Password{% endblock %}
+
 {% block content %}
+
+
 <form method = "POST">
-    <input type = "hidden" name = "csrf_token" id = "csrf_token" value = "{{csrf_token()}}"/>
-    <h3 class = "text-center">Register</h3>
-    <div class = "form-group">
-        <label for = "email">Email Address</label>
-        <input 
-            type = "email" 
-            class = "form-control" 
-            id="email" name="email" 
-            placeholder="Enter email"
-        >
-    </div>
-    <div class = "form-group">
-        <label for = "username">Username</label>
-        <input 
-            type = "text" 
-            class = "form-control" 
-            id="username" name="username" 
-            placeholder="Enter username"
-        >
-    </div>
+    <input type = "hidden" id = "csrf_token" name = "csrf_token" value = "{{csrf_token()}}"/>
+    <h3 align = "center">New Password</h3>
+    <h5 align = "center">Will delete all passkeys on account.</h5>
     <div class = "form-group">
         <label for = "password1">Password</label>
         <input 
@@ -49,11 +35,11 @@
         >
     </div>
     <br/>
-    <button onclick = "sendRegisterData()" type = "button" class = "btn btn-primary">Submit</button>
+    <button type="button" onclick = "sendResetData()" class = "btn btn-primary">Send Reset</button>
 </form>
 
-<script type = "text/javascript" src = "static/js/bower_components/zxcvbn/dist/zxcvbn.js"></script>
-<script type = "text/javascript" src = "static/js/cse.js"></script>
-<script type =" text/javascript" src = "static/js/password_check.js"></script>
+<script type = "text/javascript" src = "../static/js/cse.js"></script>
+<script type = "text/javascript" src = "../static/js/bower_components/zxcvbn/dist/zxcvbn.js"></script>
+<script type = "text/javascript" src = "../static/js/password_check.js"></script>
 
 {%endblock%}

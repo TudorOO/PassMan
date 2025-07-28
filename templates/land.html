@@ -7,24 +7,24 @@
     <br>
     <p class = "text-center">Passman password manager provides a safe way to create and store incredibly strong passwords for all of your apps.
         It provides safety and convenience, removing the need to remember an ever-growing number of passwords, while also making sure that 
-        they are complex enough to be safe in the event of a breach.
+        they are complex enough to be safe in the event of a breach, using a full <b>zero-knowledge arhitecture</b> with both <b>CSE</b> and <b>SSE</b>.
     </p>
 
     <br><br>
 
     <h4>Why it's safe:</h4>
     <br>
-    <h5>1. The server doesen't see your password ever.</h5>
-    <p>This makes sure that, even if our server is breached, your passwords will still be safe.</p>
+    <h5>1. The server doesen't see your password, ever.</h5>
+    <p>From the moment you enter it, the password is encrypted before being sent to our server using the latest and strongest technologies available. This protects against man-in-the middle attacks and ensures that even if the server is compromised, your master password is safe. </p>
     <br>
 
     <h5>2. All data is stored using the latest encryption technology available.</h5>
-    <p>We hash the master password with <b>scrypt</b> and encrypt the passwords using a key derived from the master password(with <b>Argon2id</b>) and <b>AESGCM</b>. Your email and firstname are also stored encrypted, so a breach won't give away any personal info. 
+    <p>We hash the master password server-side with <b>scrypt</b> and encrypt the passwords using a key derived from the master password(with <b>Argon2id</b>) and <b>AESGCM</b>. Your email and username are also stored encrypted, so a breach won't give away any personal info. 
     These technologies provide powerful protection against even the strongest attacks, such as GPU-Based ones.</p>
     <br>
 
     <h5>3. Encryption and decryption of passwords can happen either only server-side, or both client-side and server-side.</h5>
-    <p>You get to choose! By default, your data is encrypted both client-side and server-side. This provides maximum security, as the server doese't see your data even once(<b>zero-knowledge</b>). The other option, server-only encryption, makes it so that the server processes your password in plaintext for a miniscule amount of time, however it makes it way easier to setup and the tradeoff in security is not that great. Wheather you want complete security or ease of use, you can have it your way!</p>
+    <p>You get to choose! By default, your data is encrypted both client-side and server-side. This provides maximum security, as the server doese't see your data even once(<b>zero-knowledge</b>). The other option, server-only encryption, makes it so that the server processes your password in plaintext for a miniscule amount of time, however it makes it way easier to setup on older versions of browsers and the tradeoff in security is not that great. Wheather you want complete security or ease of use, you can have it your way!</p>
     <br>
 
     <h5>4. No AI corners cut.</h5>
@@ -40,7 +40,7 @@
     <h4>How it works:</h4><br>
 
     <h5>1. You make an account</h5>
-    <p>The master password you provide is encrypted using <b>scrypt</b> and stored. In addition, a backup file is generated, which you can then download and use if you wish to login without a password later.</p>
+    <p>The master password you provide is encrypted server-side using a key derived from itself via <b>Argon2id</b> with <b>AES-GCM</b> and then encrypted server-side using <b>scrypt</b> and stored. In addition, a backup file is generated, which you can then download and use if you wish to login without a password later.</p>
     <br>
 
     <h5>2. You create a passkey for an app</h5>
@@ -51,12 +51,11 @@
     <h4>Other features(some not yet added):</h4>
     <h5>1. Resetting passwords</h5>
     <h5>2. Two Factor Authentication</h5>
-    <h5>3. Zero-knowledge mode(client+server side AES-GCM encryption/decryption)</h5>
     <h5>4. Breach monitoring</h5>
     <h5>5. YubiKey integration</h5>
     <br><br>
 
-    <h5><b>Tech Stack: </b>Flask, HTMX, SQLite, Bootstrap, Argon2id, AES-GCM, Flask-WTF CSRF Protection, Flask-Limiter, Flask-talisman</h5>
+    <h5><b>Tech Stack: </b>Flask, HTMX, SubtleCrypto, SQLite, Bootstrap, Argon2id, AES-GCM, Flask-WTF CSRF Protection, Flask-Limiter, Flask-talisman, ZXCVBN</h5>
     <br><br><br><br><br>
 
     <h3 class = "text-center">Disclaimer: Passman is a learning project and should not be used for real-world password storage.</h1>

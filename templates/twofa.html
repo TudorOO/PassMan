@@ -1,0 +1,26 @@
+{%extends "index.html"%}
+{% block title %}PassMan{% endblock %}
+{% block content %} 
+
+    <h1 class = "text-center">Two-Factor</h1>
+
+    <img class = "mx-auto d-block" src="data:image/png;base64,{{ qr_image }}" alt="2FA QR Code">
+
+    <h3 align = "center">Scan this QR code using google authenticator, then input the code below to enable two-factor authentication!</h3>
+    <form  method = "POST" style = "display: inline;">
+        <input type = "hidden" id = "csrf_token" name = "csrf_token" value = "{{csrf_token()}}"/>
+        <input
+        class = "mx-auto d-block form-control w-25"
+        type = "text"
+        id = "twofa_code"
+        name = "twofa_code"
+        placeholder = "Google authentication code">
+        <br>
+        <button class = "btn btn-primary mx-auto d-block" 
+        type = "submit" 
+        name = "twofa_button"
+        id = "twofa_button" >Send</button>
+    </form>
+
+
+{%endblock%}

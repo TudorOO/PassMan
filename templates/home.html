@@ -23,6 +23,7 @@
 
 </div>
 
+<script src = "/static/js/cse.js"></script>
 
 <script>
 
@@ -45,7 +46,7 @@
             <dialog id = "newPass">
                 <button onclick = "closeDialog('newPass')" type = "button">X</button>
                 <form method = 'POST'>
-                    <input type = "hidden" name = "csrf_token" value = "{{csrf_token()}}"/>
+                    <input type = "hidden" name = "csrf_token" id = "csrf_token" value = "{{csrf_token()}}"/>
                     <h1 class = "text-center">New Password</h1>
                     <div class = "form-group">
                         <label for = "app">Application(website)</label>
@@ -59,11 +60,15 @@
                         <input
                             type = "password"
                             class = "form-control"
-                            id = "mpass" name = "mpass"
+                            id = "maspass" name = "maspass"
                             placeholder = "Enter Master Password"
                         >
                     </div>
-                    <button class = "btn btn-primary" type = "submit" name = "submit_button" value = "New Passkey">Submit</button>
+                    <button class = "btn btn-primary" 
+                        onclick = "sendKeyDialog('New Passkey', {{user.id}})" 
+                        type = "button" 
+                        name = "submit_button" 
+                    value = "New Passkey">Submit</button>
                 </form> 
             </dialog>`);
             document.body.appendChild(popup);
@@ -72,9 +77,9 @@
         }else if(action == "R"){
             const popup = addHTML(`
             <dialog id = "dialog` + name + `">
-                <button onclick = "closeDialog('dialog` + name + `')" type = "button">X</button>
+                <button onclick = "closeDialog('dialog` + name + `') " type = "button">X</button>
                 <form method = "POST" style = "display: inline;">
-                    <input type = "hidden" name = "csrf_token" value = "{{csrf_token()}}"/>
+                    <input type = "hidden" name = "csrf_token" id = "csrf_token" value = "{{csrf_token()}}"/>
                     <label for = "mpass">Master Password</label>
                     <input
                         type = "password"
@@ -83,9 +88,10 @@
                         placeholder = "Enter Master Password"
                     >
                     <button class = "btn btn-primary" 
-                        type = "submit" 
+                        type = "button" 
                         name = "submit_button" 
-                    value = "R` + name + `"">Reveal</button>
+                        onclick = "sendKeyDialog('R`+name+`', {{user.id}})"
+                    value = "R` + name + `">Reveal</button>
                 </form>
             </dialog>`);
             document.body.appendChild(popup);
@@ -96,7 +102,7 @@
             <dialog id = "dialog` + name + `">
                 <button onclick = "closeDialog('dialog` + name + `')" type = "button">X</button>
                 <form method = "POST" style = "display: inline;">
-                    <input type = "hidden" name = "csrf_token" value = "{{csrf_token()}}"/>
+                    <input type = "hidden" name = "csrf_token" id = "csrf_token" value = "{{csrf_token()}}"/>
                     <label for = "mpass">Master Password</label>
                     <input
                         type = "password"
@@ -105,8 +111,9 @@
                         placeholder = "Enter Master Password"
                     >
                     <button class = "btn btn-primary" 
-                        type = "submit" 
+                        type = "button" 
                         name = "submit_button" 
+                        onclick = "sendKeyDialog('D`+name+`', {{user.id}})"
                     value = "D` + name + `"">Delete</button>
                 </form>
             </dialog>`);

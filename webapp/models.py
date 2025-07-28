@@ -17,10 +17,15 @@ class Passkey(db.Model):
 #User Database
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
+
+    twofa = db.Column(db.Boolean(), default = 0)
+    twofa_key = db.Column(db.String(34))
+
     email = db.Column(db.String(150), unique = True)
     salt = db.Column(db.String(100))
+    iv = db.Column(db.String(100))
     password = db.Column(db.String(150))
-    first_name = db.Column(db.String(150))
+    username = db.Column(db.String(150))
     date = db.Column(db.DateTime(timezone = True), default = func.now())
     keys = db.relationship('Passkey')
 

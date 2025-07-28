@@ -71,7 +71,7 @@ Visit http://localhost:8000 in your browser.
 ```
 
 
-🧠 Security Highlights
+### 🧠 Security Highlights
 
     Zero-Knowledge Encryption: Server never sees your decrypted data
 
@@ -83,7 +83,7 @@ Visit http://localhost:8000 in your browser.
 
     Content Security Policy: Basic headers set
 
-🛠️ Roadmap Ideas
+### 🛠️ Roadmap Ideas
 
     🔁 Password auto-rotation support
 
@@ -97,7 +97,7 @@ Visit http://localhost:8000 in your browser.
 
     🌐 Geo-fencing login protection
 
-🤝 Contributing
+### 🤝 Contributing
 
 Pull requests and suggestions are always welcome! Whether it's UI polish, crypto audits, or feature ideas — feel free to fork and submit a PR.
 ⚠️ Disclaimer

@@ -1,107 +1,53 @@
-PassMan — Your Own Secure Password Manager
+# 🔐 PassMan — Secure, Minimal, and Encrypted Password Manager
 
-A simple, secure, and self-hosted password manager built for privacy-first users.
+PassMan is a sleek, lightweight password manager built with security at its core. It leverages both **client-side** and **server-side encryption**, supports **2FA (Two-Factor Authentication)**, and allows seamless management of your credentials—all wrapped in a simple, responsive interface.
 
-PassMan is a lightweight password manager that focuses on client-side encryption, zero-trust principles, and usability. Designed to be hosted privately, it never sends unencrypted secrets to the server, and it makes no compromises when it comes to protecting your data.
+---
 
-🚀 Features
+## 🚀 Features
 
-Client-side encryption (AES-GCM + Argon2id): Your passwords never leave the browser unencrypted.
+- 🔑 **AES-GCM Encryption** for stored passwords  
+- 🧠 **Argon2id Key Derivation** with strong salt & IV support  
+- 🔐 **Client-side encryption** before transmission — zero knowledge by default  
+- 🛡️ **Two-Factor Authentication (2FA)** via TOTP (Google Authenticator compatible)  
+- 📦 **Backup & Restore** with encrypted recovery files  
+- 📉 **Breach Detection** using [HaveIBeenPwned API]  
+- 🧠 **Password Generator** with random strong key creation  
+- ✨ **Modern UI** built with Bootstrap + HTMX  
+- 📂 **No third-party storage** — SQLite local DB
 
-Backup file login: Authenticate using an encrypted file you own.
+---
 
-Master password caching: Optional, minimal exposure in RAM.
+## 🧪 Tech Stack
 
-Two-Factor Authentication (TOTP, QR code-based).
+| Layer        | Technology |
+|--------------|------------|
+| Backend      | Flask (Python) |
+| Database     | SQLite (SQLAlchemy ORM) |
+| Security     | AES-GCM, Argon2id, pyotp |
+| Frontend     | Bootstrap, HTMX |
+| Others       | Flask-Login, Flask-WTF, dotenv, qrcode |
 
-HIBP breach checker: See if any of your passwords have been exposed, using the k-anonymity model.
+---
 
-Password generator: One-click random key generation.
+## 📸 Screenshots
 
-HTMX-enhanced UI: No heavy frontend frameworks.
+<p float="left">
+  <img src="assets/dashboard.png" width="47%" />
+  <img src="assets/twofa.png" width="47%" />  
+</p>
 
-Rate limiting, CSRF protection, and session control out of the box.
+> 🔎 *Dashboard view* with encrypted entries and breach detection.  
+> 📱 *2FA onboarding* via QR code for Google Authenticator or similar apps.
 
-🔧 How It Works
+---
 
-Each password is encrypted using a randomly generated key, which is itself encrypted with a key derived from your master password.
+## ⚙️ Setup Instructions
 
-The master password is never stored anywhere, not even in memory unless strictly needed.
-
-2FA secrets are generated and stored encrypted, and verified using TOTP when enabled.
-
-The HIBP API is used to check for password exposure without ever sending your full password.
-
-🧰 Stack
-
-Backend: Flask (Python)
-
-Frontend: Bootstrap + HTMX + vanilla JS
-
-Crypto: AES-GCM (from cryptography), Argon2id (via argon2-cffi)
-
-Database: SQLite
-
-Others: Flask-Login, Flask-Limiter, PyOTP, qrcode, Pillow
-
-💡 Why I Built This
-
-I wanted a password manager that didn't just claim to be secure, but actually gave me control. Something I could host, audit, and understand. I didn't want my passwords sitting in someone else's cloud, and I wanted to practice modern security principles. So I built PassMan.
-
-This is a personal learning project, but one that puts security and clean design first. Everything is built by hand: the login flow, the encryption logic, the breach checks, and the 2FA system.
-
-🎓 Who Is This For?
-
-Security enthusiasts and students looking for inspiration.
-
-Recruiters or universities evaluating secure coding skills.
-
-Anyone who wants to see a fully working, end-to-end secure app built from scratch.
-
-⚖️ Important Note
-
-DO NOT USE FOR STORING REAL PASSWORDS YET.
-
-This project is not audited and was built for educational purposes. If you'd like to reuse or adapt it, make sure to do your own security review.
-
-📚 Setup
-
+```bash
 git clone https://github.com/TudorOO/PassMan.git
 cd PassMan
-python3 -m venv .venv
-source .venv/bin/activate
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
-flask --app webapp run
-
-Runs on: Python 3.10+
-
-👁️ Screenshot Preview
-
-Add these under /docs/:
-
-Vault screen
-
-QR code modal
-
-Breach check dashboard
-
-🚀 Future Ideas
-
-Geo-fencing login support
-
-Secure note storage
-
-Password change workflow with app auto-updates
-
-U2F / WebAuthn support
-
-Mobile-first responsive redesign
-
-👤 Author
-
-Tudor O.Student passionate about security and systems programming. Always experimenting, always building.
-
-GitHub: @TudorOO
-
-⭐ If this helped you, give it a star!
-
+flask run

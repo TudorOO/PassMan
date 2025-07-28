@@ -2,7 +2,7 @@
 
 PassMan is a privacy-first, open-source password manager built with Flask, SQLite, and strong cryptography. It offers both client-side and server-side encryption, TOTP-based 2FA, breach detection via HaveIBeenPwned, and a responsive Bootstrap interface.
 
-No tracking, no data mining — just secure, local-first password storage.
+No tracking, no data mining, just secure, local-first password storage.
 
 ---
 
@@ -37,34 +37,38 @@ cp .env.example .env
 
 # Run the app
 flask run
+```
 
-🐳 Docker Setup (Recommended)
+### 🐳 Docker Setup (Recommended)
 
 If you prefer isolation and easier deployment, use Docker:
-1. Clone the repository
 
+1. Clone the repository
+```bash
 git clone https://github.com/TudorOO/PassMan.git
 cd PassMan
+```
 
 2. Create a .env file
 
 Make a .env file in the root directory. Here’s an example:
-
+```bash
 SECRET_KEY=your-secret-key
 ENCRYPTION_KEY=your-encryption-key
 DATABASE_URL=sqlite:///db.sqlite3
-
+```
 3. Build the Docker image
-
+```bash
 docker build -t passman .
-
+```
 4. Run the container
-
+```bash
 docker run --env-file .env -p 8000:8000 passman
-
+```
 5. Access PassMan
-
+```bash
 Visit http://localhost:8000 in your browser.
+```
 📂 Project Structure
 
 PassMan/

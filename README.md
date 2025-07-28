@@ -1,94 +1,107 @@
-# 🔐 PassMan — Modern, Secure, Offline-First Password Manager
+PassMan — Your Own Secure Password Manager
 
-> A zero-trust, self-hosted password manager built with Flask, HTMX, and cutting-edge cryptography.
+A simple, secure, and self-hosted password manager built for privacy-first users.
 
----
+PassMan is a lightweight password manager that focuses on client-side encryption, zero-trust principles, and usability. Designed to be hosted privately, it never sends unencrypted secrets to the server, and it makes no compromises when it comes to protecting your data.
 
-## 🚀 Why PassMan?
+🚀 Features
 
-Most password managers either trust their cloud backend — or compromise on usability.  
-**PassMan** is built to be fully offline (or self-hosted), with **military-grade encryption**, **user-friendly design**, and **modern security practices**.
+Client-side encryption (AES-GCM + Argon2id): Your passwords never leave the browser unencrypted.
 
-It's built from scratch. No browser plugins. No vendor lock-in. **Your data. Your keys. Your rules.**
+Backup file login: Authenticate using an encrypted file you own.
 
----
+Master password caching: Optional, minimal exposure in RAM.
 
-## 🧠 Features
+Two-Factor Authentication (TOTP, QR code-based).
 
-- 🔑 **Secure Vault Storage** using AES-GCM encryption with Argon2id key derivation.
-- 🧪 **Password Breach Checker** powered by [HaveIBeenPwned](https://haveibeenpwned.com/API).
-- 🧬 **Two-Factor Authentication** via TOTP (Google Authenticator-compatible).
-- 📁 **Backup File Login**: Restore access using an encrypted local file.
-- 🎲 **Random Password Generator**: Generate high-entropy credentials with a click.
-- 🧼 Minimal, elegant **HTMX-powered UI**.
-- 🛡️ CSRF protection, rate limiting, and user session isolation.
-- 🕵️ Fully server-side. **No password ever leaves your machine in plaintext.**
+HIBP breach checker: See if any of your passwords have been exposed, using the k-anonymity model.
 
----
+Password generator: One-click random key generation.
 
-## 🧱 Tech Stack
+HTMX-enhanced UI: No heavy frontend frameworks.
 
-| Layer       | Tech                  |
-|-------------|------------------------|
-| Backend     | Python, Flask, SQLite  |
-| Frontend    | Bootstrap, HTMX        |
-| Crypto      | `cryptography`, AES-GCM, Argon2id |
-| 2FA         | `pyotp`, QR via `qrcode` + `Pillow` |
-| Breach Check| HIBP API (`k-anonymity` via SHA1 prefix) |
-| Login Rate  | `flask-limiter`        |
-| Session     | `flask-login`          |
+Rate limiting, CSRF protection, and session control out of the box.
 
----
+🔧 How It Works
 
-## 📸 Screenshots
+Each password is encrypted using a randomly generated key, which is itself encrypted with a key derived from your master password.
 
-| Vault | 2FA Setup | Breach Dashboard |
-|-------|-----------|------------------|
-| ![vault](https://raw.githubusercontent.com/TudorOO/PassMan/main/docs/vault.png) | ![2fa](https://raw.githubusercontent.com/TudorOO/PassMan/main/docs/2fa.png) | ![breach](https://raw.githubusercontent.com/TudorOO/PassMan/main/docs/breach.png) |
+The master password is never stored anywhere, not even in memory unless strictly needed.
 
-> *(Add screenshots under `/docs/` if you want these to show up.)*
+2FA secrets are generated and stored encrypted, and verified using TOTP when enabled.
 
----
+The HIBP API is used to check for password exposure without ever sending your full password.
 
-## 🧪 Security Design
+🧰 Stack
 
-PassMan uses a **zero-trust approach**:
+Backend: Flask (Python)
 
-- Vault passwords are encrypted **individually** with a derived key from the master password.
-- Nothing is stored in plaintext. Even in-memory operations avoid leaks.
-- Passwords are hashed with Argon2id (memory-hard, slow, resistant to GPU brute-force).
-- Authentication supports 2FA via QR + TOTP.
-- Breach checks are performed without leaking full passwords using SHA-1 `k-anonymity` ranges.
+Frontend: Bootstrap + HTMX + vanilla JS
 
-📖 See `crypto.py` and `backup.py` for full implementation details.
+Crypto: AES-GCM (from cryptography), Argon2id (via argon2-cffi)
 
----
+Database: SQLite
 
-## 🛠 How to Run Locally
+Others: Flask-Login, Flask-Limiter, PyOTP, qrcode, Pillow
 
-```bash
+💡 Why I Built This
+
+I wanted a password manager that didn't just claim to be secure, but actually gave me control. Something I could host, audit, and understand. I didn't want my passwords sitting in someone else's cloud, and I wanted to practice modern security principles. So I built PassMan.
+
+This is a personal learning project, but one that puts security and clean design first. Everything is built by hand: the login flow, the encryption logic, the breach checks, and the 2FA system.
+
+🎓 Who Is This For?
+
+Security enthusiasts and students looking for inspiration.
+
+Recruiters or universities evaluating secure coding skills.
+
+Anyone who wants to see a fully working, end-to-end secure app built from scratch.
+
+⚖️ Important Note
+
+DO NOT USE FOR STORING REAL PASSWORDS YET.
+
+This project is not audited and was built for educational purposes. If you'd like to reuse or adapt it, make sure to do your own security review.
+
+📚 Setup
+
 git clone https://github.com/TudorOO/PassMan.git
 cd PassMan
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-
-# Run the Flask app
 flask --app webapp run
 
-    📌 Requires Python 3.10+ and Linux/macOS for full functionality.
+Runs on: Python 3.10+
 
-🔐 Disclaimer
+👁️ Screenshot Preview
 
-DO NOT USE THIS FOR STORING REAL CREDENTIALS.
-This project is for educational and demonstration purposes only.
+Add these under /docs/:
 
-While strong cryptography is used, no audit has been performed, and it's meant to showcase secure coding practices — not replace commercial password managers.
-🧑‍💻 Author
+Vault screen
 
-Tudor O.
-High school student passionate about cybersecurity and secure systems.
-Building open-source projects to learn, grow, and hopefully impress some recruiters :)
+QR code modal
 
-🌐 GitHub
-⭐️ Star this project if you like it!
+Breach check dashboard
+
+🚀 Future Ideas
+
+Geo-fencing login support
+
+Secure note storage
+
+Password change workflow with app auto-updates
+
+U2F / WebAuthn support
+
+Mobile-first responsive redesign
+
+👤 Author
+
+Tudor O.Student passionate about security and systems programming. Always experimenting, always building.
+
+GitHub: @TudorOO
+
+⭐ If this helped you, give it a star!
+

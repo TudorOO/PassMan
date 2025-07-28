@@ -28,12 +28,15 @@ mdurl==0.1.2
 Naked==0.1.32
 ordered-set==4.1.0
 packaging==25.0
+pillow==11.3.0
 pycparser==2.22
 pycryptodome==3.23.0
 Pygments==2.19.2
 pymongo==4.13.2
+pyotp==2.9.0
 python-dotenv==1.1.1
 PyYAML==6.0.2
+qrcode==8.2
 requests==2.32.4
 rich==13.9.4
 shellescape==3.8.1

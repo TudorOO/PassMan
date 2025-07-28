@@ -107,7 +107,7 @@
                 const container = document.getElementById("breach_monitor");
 
                 for(const [app, count] of Object.entries(data.result)){
-                    if(count == 0){
+                    if(count > 0){
                         const p = addHTML(`
                         <h5 class = "text-center" style = "color: red;">Password for ${app} has been found in ${count} data breach(es). It should be reset!`);
                         container.appendChild(p);

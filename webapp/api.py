@@ -1,11 +1,12 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, flash, render_template
 from flask_login import login_required, current_user
 from .models import User
 import requests
 import hashlib
 from cryptography.hazmat.primitives.kdf.argon2 import Argon2id
+from werkzeug.security import check_password_hash
 from dotenv import load_dotenv
-from webapp.auth import encrypt_aes
+from webapp.auth import encrypt_aes, decrypt_aes
 from webapp.views import decrypt_passkey
 
 load_dotenv()
@@ -16,44 +17,50 @@ api = Blueprint("api", __name__)
 @login_required
 def get_breach_number():
     if request.method == "POST":
+
         result = {}
         total = 0
         mpass = request.form.get("mpass")
-        mpass = mpass.encode("utf-8")
-        for key in current_user.keys:
-            # Decrypt passkey using mpass
-            kdf = Argon2id(
-                salt=bytes.fromhex(key.salt),
-                length=32,
-                iterations=4,
-                lanes=4,
-                memory_cost=256 * 1024,
-            )
-            decrypk = decrypt_passkey(key.key, kdf.derive(mpass), key.app)
+        if check_password_hash(current_user.password, mpass):
+            mpass = mpass.encode("utf-8")
+            for key in current_user.keys:
+                # Decrypt passkey using mpass
+                kdf = Argon2id(
+                    salt=bytes.fromhex(key.salt),
+                    length=32,
+                    iterations=4,
+                    lanes=4,
+                    memory_cost=256 * 1024,
+                )
+                decrypk = decrypt_passkey(key.key, kdf.derive(mpass), key.app)
 
-            # Hash and send to haveibeenpwned api
-            sha_password = hashlib.sha1(decrypk).hexdigest()
-            sha_postfix = sha_password[5:].upper()
-            url = "https://api.pwnedpasswords.com/range/" + sha_password[0:5].upper()
+                # Hash and send to haveibeenpwned api
+                sha_password = hashlib.sha1(decrypk).hexdigest()
+                sha_postfix = sha_password[5:].upper()
+                url = "https://api.pwnedpasswords.com/range/" + sha_password[0:5].upper()
 
-            response = requests.request("GET", url, headers = {}, data = {})
-            pwnd_dict = {}
+                response = requests.request("GET", url, headers = {}, data = {})
+                pwnd_dict = {}
 
-            pwnd_list = response.text.split('\r\n')
-            for pwnd_pass in pwnd_list:
-                pwnd_hash = pwnd_pass.split(":")
-                pwnd_dict[pwnd_hash[0]] = pwnd_hash[1]
-            if sha_postfix in pwnd_dict.keys():
-                result[key.app] = pwnd_dict[sha_password.upper()]
-                total += pwnd_dict[sha_password.upper()]
-            else:
-                result[key.app] = 0
-        data = {
-            "total": total,
-            "result": result
-        }
-        print(data)
-        return jsonify(data)
+                pwnd_list = response.text.split('\r\n')
+                for pwnd_pass in pwnd_list:
+                    pwnd_hash = pwnd_pass.split(":")
+                    pwnd_dict[pwnd_hash[0]] = pwnd_hash[1]
+                if sha_postfix in pwnd_dict.keys():
+                    result[key.app] = pwnd_dict[sha_password.upper()]
+                    total += pwnd_dict[sha_password.upper()]
+                else:
+                    result[key.app] = 0
+            data = {
+                "total": total,
+                "result": result
+            }
+            print(data)
+            return jsonify(data)
+        else:
+            print("Wrong master password")
+            flash("Wrong master password", category="error")
+            return render_template("account.html", user = current_user, username = decrypt_aes(current_user.username))
 
 
 

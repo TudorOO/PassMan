@@ -55,7 +55,7 @@
         function showMasterModal(){
             const popup = addHTML(`
             <dialog id = "Masterdialog">
-                <button onclick = "closeDialog('Masterdialog')" type = "button">X</button>
+                <button onclick = "closeDialog('Masterdialog')" type="button" class="btn-close" aria-label="Close"></button>
                 <form method = "POST" style = "display: inline;">
                     <input type = "hidden" name = "csrf_token" id = "csrf_token" value = "{{csrf_token()}}"/>
                     <input type = "hidden" name = "user_id" id = "user_id" value = "{{user.id}}">

@@ -1,64 +1,221 @@
 {%extends "index.html"%}
 {% block title %}PassMan{% endblock %}
 {% block content %} 
+    <div class="page-wrapper overflow-hidden">
+    <section class="banner-section position-relative d-flex align-items-end min-vh-100">
+      <video class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover" autoplay muted loop playsinline>
+        <source src="../static/assets/videos/keyboard_typing_bg.mp4" type="video/mp4" />
+      </video>
+      <div class="container">
+        <div class="d-flex flex-column gap-4 pb-8 position-relative z-1">
+          <div class="row align-items-center">
+            <div class="col-xl-10 ms-2">
+              <div class="d-flex align-items-center gap-4" data-aos="fade-up" data-aos-delay="100"
+                data-aos-duration="1000">
+                <p class="mb-0 text-white fs-5 text-opacity-70">Your secure, easy to use and flexible <span
+                    class="text-primary">password manager</span></p>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-end gap-3 " style ="margin-bottom: 10vh" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
+            <h1 class="mb-0 fs-16 text-white lh-1">Passman</h1>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <h1 class = "text-center">PASSMAN</h1>
-    <h3 class = "text-center">Flask-based password manager</h3>
-    <br>
-    <p class = "text-center">Passman password manager provides a safe way to create and store incredibly strong passwords for all of your apps.
-        It provides safety and convenience, removing the need to remember an ever-growing number of passwords, while also making sure that 
-        they are complex enough to be safe in the event of a breach, using a full <b>zero-knowledge arhitecture</b> with both <b>CSE</b> and <b>SSE</b>.
-    </p>
+    <section class="services py-5 py-lg-11 py-xl-12 bg-dark" id="services">
+      <div class="container">
+        <div class="d-flex flex-column gap-5 gap-xl-10">
+          <div class="row gap-7 gap-xl-0">
+            <div class="col-xl-4 col-xxl-4">
+              <div class="d-flex align-items-center gap-7 py-2" data-aos="fade-right" data-aos-delay="100"
+                data-aos-duration="1000">
+                
+              </div>
+            </div>
+            <div class="col-xl-8 col-xxl-7">
+              <div class="row">
+                <div class="col-xxl-8">
+                  <div class="d-flex flex-column gap-6" data-aos="fade-up" data-aos-delay="100"
+                    data-aos-duration="1000">
+                    <h2 class="mb-0 text-white">Why it's safe</h2>
+                    <p class="fs-5 mb-0 text-white text-opacity-70">Just some of the features that keep your passwords secure.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="services-tab">
+            <div class="row gap-5 gap-xl-0">
+              <div class="col-xl-4">
+                <div class="tab-content" data-aos="zoom-in" data-aos-delay="100" data-aos-duration="1000">
+                  <div class="tab-pane active" id="one" role="tabpanel" aria-labelledby="one-tab" tabindex="0">
+                    <img src="../assets/images/services/services-img-1.jpg" alt="services" class="img-fluid">
+                  </div>
+                  <div class="tab-pane" id="two" role="tabpanel" aria-labelledby="two-tab" tabindex="0">
+                    <img src="../assets/images/services/services-img-2.jpg" alt="services" class="img-fluid">
+                  </div>
+                  <div class="tab-pane" id="three" role="tabpanel" aria-labelledby="three-tab" tabindex="0">
+                    <img src="../assets/images/services/services-img-3.jpg" alt="services" class="img-fluid">
+                  </div>
+                  <div class="tab-pane" id="four" role="tabpanel" aria-labelledby="four-tab" tabindex="0">
+                    <img src="../assets/images/services/services-img-4.jpg" alt="services" class="img-fluid">
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-8">
+                <div class="d-flex flex-column gap-5">
+                  <ul class="nav nav-tabs" id="myTab" role="tablist" data-aos="fade-up" data-aos-delay="200"
+                    data-aos-duration="1000">
+                    <li
+                      class="nav-item py-4 py-lg-8 border-top border-white border-opacity-10 d-flex align-items-center w-100"
+                      role="presentation">
+                      <div class="row w-100 align-items-center gx-3">
+                        <div class="col-lg-6 col-xxl-5">
+                          <button class="nav-link fs-10 fw-bold py-1 px-0 border-0 rounded-0 flex-shrink-0 active"
+                            id="one-tab" data-bs-toggle="tab" data-bs-target="#one" type="button" role="tab"
+                            aria-controls="one" aria-selected="true">Crypto Functions</button>
+                        </div>
+                        <div class="col-lg-6 col-xxl-7">
+                          <p class="text-white text-opacity-70 mb-0">
+                            We use only the strongest, military-grade algorithms for encryption and decryption.
+                            Passwords are encrypted with <b>AES-GCM</b> with keys derived with <b>Argon2</b>.
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                    <li
+                      class="nav-item py-4 py-lg-8 border-top border-white border-opacity-10 d-flex align-items-center w-100"
+                      role="presentation">
+                      <div class="row w-100 align-items-center gx-3">
+                        <div class="col-lg-6 col-xxl-5">
+                          <button class="nav-link fs-10 fw-bold py-1 px-0 border-0 rounded-0 flex-shrink-0" id="two-tab"
+                            data-bs-toggle="tab" data-bs-target="#two" type="button" role="tab" aria-controls="two"
+                            aria-selected="false">Zero-Knowledge Arhitecture</button>
+                        </div>
+                        <div class="col-lg-6 col-xxl-7">
+                          <p class="text-white text-opacity-70 mb-0">
+                            All master passwords are encrypted <b>both server-side and client-side</b>, 
+                            meaning that the server never sees your password in plaintext.
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                    <li
+                      class="nav-item py-4 py-lg-8 border-top border-white border-opacity-10 d-flex align-items-center w-100"
+                      role="presentation">
+                      <div class="row w-100 align-items-center gx-3">
+                        <div class="col-lg-6 col-xxl-5">
+                          <button class="nav-link fs-10 fw-bold py-1 px-0 border-0 rounded-0 flex-shrink-0"
+                            id="three-tab" data-bs-toggle="tab" data-bs-target="#three" type="button" role="tab"
+                            aria-controls="three" aria-selected="false">Two-Factor Authentication</button>
+                        </div>
+                        <div class="col-lg-6 col-xxl-7">
+                          <p class="text-white text-opacity-70 mb-0">
+                            Passman gives you the option to enable <b>2FA</b> with any of your favourite authenticator apps
+                            (Google Authenticator recommended). This adds another layer of protection, keeping your data even safer.
+                          </p>
+                        </div>
+                      </div
+                    </li>
+                    <li
+                      class="nav-item py-4 py-lg-8 border-top border-white border-opacity-10 d-flex align-items-center w-100"
+                      role="presentation">
+                      <div class="row w-100 align-items-center gx-3">
+                        <div class="col-lg-6 col-xxl-5">
+                          <button class="nav-link fs-10 fw-bold py-1 px-0 border-0 rounded-0 flex-shrink-0"
+                            id="four-tab" data-bs-toggle="tab" data-bs-target="#four" type="button" role="tab"
+                            aria-controls="four" aria-selected="false">Breach Monitoring</button>
+                        </div>
+                        <div class="col-lg-6 col-xxl-7">
+                          <p class="text-white text-opacity-70 mb-0">
+                            You can see if any of your passwords have been found in a leak and can respond
+                            accordingly(ideally changing the passwords), directly in the app!
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <br><br>
 
-    <h4>Why it's safe:</h4>
-    <br>
-    <h5>1. The server doesen't see your password, ever.</h5>
-    <p>From the moment you enter it, the password is encrypted before being sent to our server using the latest and strongest technologies available. This protects against man-in-the middle attacks and ensures that even if the server is compromised, your master password is safe. </p>
-    <br>
-
-    <h5>2. All data is stored using the latest encryption technology available.</h5>
-    <p>We hash the master password server-side with <b>scrypt</b> and encrypt the passwords using a key derived from the master password(with <b>Argon2id</b>) and <b>AESGCM</b>. Your email and username are also stored encrypted, so a breach won't give away any personal info. 
-    These technologies provide powerful protection against even the strongest attacks, such as GPU-Based ones.</p>
-    <br>
-
-    <h5>3. Encryption and decryption of passwords can happen either only server-side, or both client-side and server-side.</h5>
-    <p>You get to choose! By default, your data is encrypted both client-side and server-side. This provides maximum security, as the server doese't see your data even once(<b>zero-knowledge</b>). The other option, server-only encryption, makes it so that the server processes your password in plaintext for a miniscule amount of time, however it makes it way easier to setup on older versions of browsers and the tradeoff in security is not that great. Wheather you want complete security or ease of use, you can have it your way!</p>
-    <br>
-
-    <h5>4. No AI corners cut.</h5>
-    <p>All code in this project is written and audited by hand, without AI-generated components, to ensure full transparency and control over security logic.</p>
-    <br>
-
-    <h5>5. No-password login.</h5>
-    <p>If you forget your master password, no worries! You can download a backup file which you can then use to login without the password.</p>
-    <p>WARNING: While the backup file is encrypted, we do not provide any protection in the case that a nefarious actor gets a hold of it. You should store it incredibly safely, ideally in an USB or another location not connected to the internet.</p>
-
-    <br><br>
-
-    <h4>How it works:</h4><br>
-
-    <h5>1. You make an account</h5>
-    <p>The master password you provide is encrypted server-side using a key derived from itself via <b>Argon2id</b> with <b>AES-GCM</b> and then encrypted server-side using <b>scrypt</b> and stored. In addition, a backup file is generated, which you can then download and use if you wish to login without a password later.</p>
-    <br>
-
-    <h5>2. You create a passkey for an app</h5>
-    <p>The passkey you create is encrypted with <b>AES-GCM</b> with a key derived from the master password using <b>Argon2id</b> which is not ever stored on the disk. This passkey can then be revealed at any time 
-    by inputting the master password again. All encryption is done with random nonces and all derivation is done with user-specific salts.</p>
-    <br><br>
-
-    <h4>Other features(some not yet added):</h4>
-    <h5>1. Resetting passwords</h5>
-    <h5>2. Two Factor Authentication</h5>
-    <h5>4. Breach monitoring</h5>
-    <h5>5. YubiKey integration</h5>
-    <br><br>
-
-    <h5><b>Tech Stack: </b>Flask, HTMX, SubtleCrypto, SQLite, Bootstrap, Argon2id, AES-GCM, Flask-WTF CSRF Protection, Flask-Limiter, Flask-talisman, ZXCVBN</h5>
-    <br><br><br><br><br>
-
-    <h3 class = "text-center">Disclaimer: Passman is a learning project and should not be used for real-world password storage.</h1>
-    <br><br>
-
+<section class="about-content py-5 py-lg-11 py-xl-12">
+      <div class="container">
+        <div class="d-flex flex-column gap-5 gap-xl-11 gap-xxl-12">
+          <div class="row gap-4 gap-lg-0">
+            <div class="col-lg-4">
+              <h2 class="fs-13 mb-0" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1000">Passman</h2>
+            </div>
+            <div class="col-lg-8">
+              <div class="d-flex flex-column gap-4 gap-lg-5" data-aos="fade-up" data-aos-delay="200"
+                data-aos-duration="1000">
+                <p class="mb-0 fs-5 text-dark">
+                  We are always looking out for our users, and so we make a promise to continue developing this project
+                  with new features and expanding or changing old ones. Besides the ones mentioned above, we also have
+                  some other features: <br><br>
+                  <b>1. No password login with auto-generated backup file</b><br>
+                  <b>2. Ability to change password while re-encrypting all passkeys on account</b><br>
+                  <b>3. Password recovery options</b><br>
+                  <b>...and many more to come!</b>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <footer class="footer bg-dark py-5 py-lg-11 py-xl-12">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-5 mb-8 mb-xl-0">
+          <div class="d-flex flex-column gap-8 pe-xl-5">
+            <h2 class="mb-0 text-white">Keeping your passwords safe.</h2>
+            <div class="d-flex flex-column gap-2">
+              <a href="https://www.wrappixel.com/" target="_blank" class="link-hover hstack gap-3 text-white fs-5">
+                <iconify-icon icon="lucide:arrow-up-right" class="fs-7 text-primary"></iconify-icon>
+                info@wrappixel.com
+              </a>
+              <a href="https://maps.app.goo.gl/hpDp81fqzGt5y4bC8" target="_blank"
+                class="link-hover hstack gap-3 text-white fs-5">
+                <iconify-icon icon="lucide:map-pin" class="fs-7 text-primary"></iconify-icon>
+                info@wrappixel.com
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-xl-2 mb-8 mb-xl-0">
+          <ul class="footer-menu list-unstyled mb-0 d-flex flex-column gap-2">
+            {% if user.is_authenticated %}
+            <li><a class="link-hover fs-5 text-white" href="/index">Home</a></li>
+            <li><a class="link-hover fs-5 text-white" href="/account">Account</a></li>
+            {%else%}
+            <li><a class="link-hover fs-5 text-white" id="services" href="/login">Login</a></li>
+            <li><a class="link-hover fs-5 text-white" href="/register">Register</a></li>
+            {%endif%}
+            <li><a class="link-hover fs-5 text-white" href="terms-and-conditions.html">Terms</a></li>
+            <li><a class="link-hover fs-5 text-white" href="privacy-policy.html">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 col-xl-2 mb-8 mb-xl-0">
+          <ul class="footer-menu list-unstyled mb-0 d-flex flex-column gap-2">
+            <li><a class="link-hover fs-5 text-white" href="#!">Facebook</a></li>
+            <li><a class="link-hover fs-5 text-white" href="#!">Instagram</a></li>
+            <li><a class="link-hover fs-5 text-white" href="#!">Twitter</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 col-xl-3 mb-8 mb-xl-0">
+          <p class="mb-0 text-white text-opacity-70 text-md-end">© Passman copyright 2025</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <h3 class = "text-center">Disclaimer: Passman is a learning project and should not be used for real-world password storage.</h1>
 {%endblock%}

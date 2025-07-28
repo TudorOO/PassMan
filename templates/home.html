@@ -44,7 +44,7 @@
         if(action == "N"){
             const popup = addHTML(`
             <dialog id = "newPass">
-                <button onclick = "closeDialog('newPass')" type = "button">X</button>
+                <button onclick = "closeDialog('newPass')" type="button" class="btn-close" aria-label="Close"></button>
                 <form method = 'POST'>
                     <input type = "hidden" name = "csrf_token" id = "csrf_token" value = "{{csrf_token()}}"/>
                     <h1 class = "text-center">New Password</h1>
@@ -77,7 +77,7 @@
         }else if(action == "R"){
             const popup = addHTML(`
             <dialog id = "dialog` + name + `">
-                <button onclick = "closeDialog('dialog` + name + `') " type = "button">X</button>
+                <button onclick = "closeDialog('dialog` + name + `') " type="button" class="btn-close" aria-label="Close"></button>
                 <form method = "POST" style = "display: inline;">
                     <input type = "hidden" name = "csrf_token" id = "csrf_token" value = "{{csrf_token()}}"/>
                     <label for = "mpass">Master Password</label>
@@ -100,7 +100,7 @@
         }else if(action == "D"){
             const popup = addHTML(`
             <dialog id = "dialog` + name + `">
-                <button onclick = "closeDialog('dialog` + name + `')" type = "button">X</button>
+                <button onclick = "closeDialog('dialog` + name + `')" type="button" class="btn-close" aria-label="Close"></button>
                 <form method = "POST" style = "display: inline;">
                     <input type = "hidden" name = "csrf_token" id = "csrf_token" value = "{{csrf_token()}}"/>
                     <label for = "mpass">Master Password</label>

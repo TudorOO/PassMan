@@ -36,7 +36,7 @@ cp .env.example .env
 # Then edit .env with your own secrets
 
 # Run the app
-flask run
+python3 main.py`
 ```
 
 ### 🐳 Docker Setup (Recommended)

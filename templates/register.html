@@ -1,56 +1,60 @@
 {%extends "index.html"%}
 {% block title %}Register{% endblock %}
 {% block content %}
-<form method = "POST">
-    <input type = "hidden" name = "csrf_token" id = "csrf_token" value = "{{csrf_token()}}"/>
-    <h3 class = "text-center">Register</h3>
-    <div class = "form-group">
-        <label for = "email">Email Address</label>
-        <input 
-            type = "email" 
-            class = "form-control" 
-            id="email" name="email" 
-            placeholder="Enter email"
-        >
-    </div>
-    <div class = "form-group">
-        <label for = "username">Username</label>
-        <input 
-            type = "text" 
-            class = "form-control" 
-            id="username" name="username" 
-            placeholder="Enter username"
-        >
-    </div>
-    <div class = "form-group">
-        <label for = "password1">Password</label>
-        <input 
-            type = "password" 
-            class = "form-control" 
-            id="password1" name="password1" 
-            placeholder="Enter password"
-        >
-    </div>
 
-    <b><p id = "message" style = "display: none; color: #595959; margin-bottom: 6px;margin-top: 6px;"">Password is <span id = "strength"></span></p></b>
-    <p id = "check1" style = "display: none; color: #595959; margin: 0px;">At least 8 characters</p>
-    <p id = "check2" style = "display: none; color: #595959; margin: 0px;">At least one lowercase letter(a-z)</p>
-    <p id = "check3" style = "display: none; color: #595959; margin: 0px;">At least one uppercase letter(A-Z)</p>
-    <p id = "check4" style = "display: none; color: #595959; margin: 0px;">At least one digit(0-9)</p>
-    <p id = "check5" style = "display: none; color: #595959; margin: 0px; margin-bottom: 7px">At least one special character(~!@#$%^&*_+=}]?><|)</p>
 
-    <div class = "form-group">
-        <label for = "password2">Password (Confirm)</label>
-        <input 
-            type = "password" 
-            class = "form-control" 
-            id="password2" name="password2" 
-            placeholder="Confirm password"
-        >
-    </div>
-    <br/>
-    <button onclick = "sendRegisterData()" type = "button" class = "btn btn-primary">Submit</button>
-</form>
+<div class="page-wrapper overflow-hidden">
+<section
+      class="bg-light-gray  border-primary border-4 d-flex align-items-center justify-content-center min-vh-100">
+      <div class="container py-3">
+        <div class="sign-in card mx-auto shadow-lg">
+          <div class="card-body py-8 px-lg-5">
+            <a href="index.html" style="text-decoration: none; color:black;" class="mb-8 hstack justify-content-center">
+              <h1 style="font-size:80px;">Passman</h1>
+            </a>
+            <form class="d-flex flex-column" method="POST">
+              <input type = "hidden" name = "csrf_token" id = "csrf_token" value = "{{csrf_token()}}"/>
+              <div>
+                <input type="text" 
+                id="username" name="username"
+                class="form-control border-bottom mb-3" 
+                placeholder="Username">
+              </div>
+              <div>
+                <input type="email" 
+                class="form-control border-bottom mb-3" 
+                id="email" name="email"
+                placeholder="Email"
+                aria-describedby="emailHelp">
+              </div>
+              <div>
+                <input type="password" 
+                class="form-control border-bottom mb-3" 
+                id="password1" name="password1"
+                placeholder="Password">
+              </div>
+                <b><p id = "message" style = "display: none; color: #595959; margin-bottom: 0px;margin-top: 0px;">Password is <span id = "strength"></span></p></b>
+                <p id = "check1" style = "display: none; color: #595959; margin: 0px;">At least 8 characters</p>
+                <p id = "check2" style = "display: none; color: #595959; margin: 0px;">At least one lowercase letter(a-z)</p>
+                <p id = "check3" style = "display: none; color: #595959; margin: 0px;">At least one uppercase letter(A-Z)</p>
+                <p id = "check4" style = "display: none; color: #595959; margin: 0px;">At least one digit(0-9)</p>
+                <p id = "check5" style = "display: none; color: #595959; margin: 0px; margin-bottom: 7px">At least one special character(~!@#$%^&*_+=}]?><|)</p>
+              <div>
+                <input type="password" 
+                class="form-control border-bottom mb-3" 
+                id="password2" name="password2"
+                placeholder="Confirm Password">
+              </div>
+
+              <a onclick = "sendRegisterData()" class="btn btn-dark w-100 justify-content-center py-2 fw-medium my-7 fs-4 lh-lg">
+                Register
+              </a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+</div>
 
 <script type = "text/javascript" src = "static/js/bower_components/zxcvbn/dist/zxcvbn.js"></script>
 <script type = "text/javascript" src = "static/js/cse.js"></script>

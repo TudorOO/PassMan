@@ -69,19 +69,7 @@ docker run --env-file .env -p 8000:8000 passman
 ```bash
 Visit http://localhost:8000 in your browser.
 ```
-📂 Project Structure
 
-PassMan/
-│
-├── templates/          # HTML templates (Jinja2 + HTMX)
-├── static/             # CSS, JS, and icons
-├── webapp/             # Blueprints (auth, account, API)
-├── main.py             # App entry point
-├── models.py           # SQLAlchemy models
-├── crypto/             # Crypto logic (AES, Argon2id)
-├── requirements.txt    
-├── Dockerfile          
-└── .env.example        
 
 🧠 Security Highlights
 

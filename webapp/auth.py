@@ -86,7 +86,7 @@ def get_geolocation():
 
     # Get geolocation from ip
     try:
-        response = request.get(f'https://ipapi.co/{ip}/json/')
+        response = request.get(f'https://api.ipinfo.io/{ip}?token=' + os.getenv("IPINFO_API_KEY"))
         data = response.json()
         city = data.get("city")
         country = data.get("country")

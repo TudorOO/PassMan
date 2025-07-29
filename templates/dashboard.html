@@ -1,0 +1,94 @@
+{%extends "index.html"%}
+{% block title %}PassMan{% endblock %}
+{% block content %} 
+
+    <h2 class = "text-center mt-3">Dashboard</h2>
+
+    <!--Vault stats-->
+
+    <h3 class = "text-center mt-7 mb-7">Vault stats</h3>
+    
+    <div class="row text-center">
+        <div class="col">
+            <div class="card p-3">
+                <h5>Total Passkeys</h5>
+                <p class="display-6">{{ user.keys|length }}</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card p-3">
+                <h5>Encryption method</h5>
+                <p style="font-size: 25px;">{{user.enc_method}}</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card p-3">
+                <h5>Two Factor Authentication</h5>
+                {%if user.twofa%}
+                    <p class="display-6" style = "color: green;">Enabled</p>
+                {%else%}
+                    <p class="display-6" style = "color: red;">Disabled</p>
+                {%endif%}
+            </div>
+        </div>
+    </div>
+
+    <div class="row text-center">
+        <div class="col">
+            <div class="card p-3">
+                <h5>Time since last password vault update</h5>
+                <p class="display-6">{{ time_since_last_update }}</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card p-3">
+                <h5>Time since last master password change</h5>
+                <p class="display-6">{{ time_since_last_mpass_change }}</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card p-3">
+                <h5>Last login location(not including this one)</h5>
+                <p class="display-6">{{ user.last_login }}</p>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!--Breach monitoring-->
+    <div id = "breach_monitor">
+        <h3 class =  "text-center mt-10 mb-2">Live breach monitoring</h3>
+        <div id = "Search_Breaches" class="mb-4">
+            <button type = "button" id = "ShowButton" class = "btn btn-primary mx-auto d-block" onclick = "showMasterModal()">Search for breaches</button> 
+        </div>
+    </div>
+
+    <div id = "breach_table">
+        <table class = "table">
+            <thead class = "thead-dark">
+                <tr>
+                    <th scope = "col">#</th>
+                    <th scope = "col">App</th>
+                    <th scope = "col">Number of breaches</th>
+                    <th scope = "col">Time since last change</th>
+                    <th scope = "col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for key in user.keys%}
+
+                    <tr>
+                        <th scope = "row">{{key.id}}</th>
+                        <td>{{key.app}}</td>
+                        <td>{{key.breaches}}</td>
+                        <td>000000</td>
+                        <td>Nothing :)</td>
+                    </tr>
+
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+{%endblock%}

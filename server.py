@@ -89,11 +89,13 @@ def create_app():
     from webapp.auth import auth
     from webapp.account import account
     from webapp.api import api
+    from webapp.dashboard import dashboard
 
     app.register_blueprint(views, url_prefix="/")
     app.register_blueprint(auth, url_prefix="/")
     app.register_blueprint(account, url_prefix="/")
     app.register_blueprint(api, url_prefix="/")
+    app.register_blueprint(dashboard, url_prefix="/")
 
     create_database(app)
 

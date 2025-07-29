@@ -9,6 +9,7 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 import os
 import re
 import json
+import datetime
 import base64
 import pyotp
 from dotenv import load_dotenv
@@ -72,6 +73,26 @@ def throw_pass_error(pass_check):
     if pass_check["symbol_error"]:
         flash("Password must contain a special symbol(#$%^@#!)")
 
+
+# Get geolocation from request
+def get_geolocation():
+    # Get ip address from request
+    if request.environ.get("HTTP_X_FORWARDED_FOR"):
+        ip = request.environ["HTTP_X_FORWARDER_FOR"].split(',')[0]
+    else:
+        ip = request.remote_addr
+    
+    print("Request ip " + ip)
+
+    # Get geolocation from ip
+    try:
+        response = request.get(f'https://ipapi.co/{ip}/json/')
+        data = response.json()
+        city = data.get("city")
+        country = data.get("country")
+        return f"{city}, {country}" if city and country else "Unknown"
+    except:
+        return "Unknown"
 
 # Send password reset mail
 def send_mail(user):
@@ -200,6 +221,7 @@ def login():
                     else:
                         flash("Logged in successfully!", category="success")
                         login_user(user, remember = False)
+                        user.last_login = get_geolocation()
                         session.permanent = True
                         return redirect(url_for("views.home"))
 
@@ -259,6 +281,10 @@ def register():
                     password=hashpass,
                     salt=salt,
                     iv = iv,
+                    enc_method = "AES-GCM with Argon2id derivation",
+                    t_update = datetime.datetime.now(),
+                    t_mpass_change = datetime.datetime.now(),
+                    last_login = get_geolocation()
                 )
 
                 # Add user to database and login
@@ -332,6 +358,8 @@ def reset_token(token):
                     user.password = pass_hash
                     user.salt = salt
                     user.iv = iv
+                    user.t_update = datetime.datetime.now()
+                    user.t_mpass_change = datetime.datetime.now()
                     db.session.commit()
                     flash("Password reseted succesfully!", "success")
                     return redirect(url_for("auth.login"))

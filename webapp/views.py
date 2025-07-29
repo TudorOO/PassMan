@@ -4,6 +4,7 @@ from .extensions import db
 from .models import Passkey
 from werkzeug.security import check_password_hash
 import os
+import datetime
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.kdf.argon2 import Argon2id
 from base64 import urlsafe_b64encode, urlsafe_b64decode
@@ -72,6 +73,8 @@ def create_passkey(app, mpass):
         user_id=current_user.id,
         salt=salt.hex(),
     )
+
+    current_user.t_update = datetime.datetime.now()
 
     db.session.add(passkey)
     db.session.commit()
@@ -157,6 +160,7 @@ def home():
                 passkey = Passkey.query.filter_by(
                     id=pass_id, user_id=current_user.id
                 ).first()
+                current_user.t_update = datetime.datetime.now()
                 db.session.delete(passkey)
                 db.session.commit()
 

@@ -93,15 +93,11 @@ Visit http://localhost:8000 in your browser.
 
     🔁 Password auto-rotation support
 
-    🌍 Optional cloud sync (opt-in and encrypted)
-
     📱 PWA support (Installable web app)
 
     🧩 Browser extension
 
     🔐 YubiKey / WebAuthn integration
-
-    🌐 Geo-fencing login protection
 
 ### 🤝 Contributing
 

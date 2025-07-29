@@ -4,6 +4,7 @@ from .extensions import db
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import base64
+import datetime
 import io
 import qrcode
 import pyotp
@@ -59,6 +60,7 @@ def change_pass():
                         current_user.password = hash_pass
                         current_user.salt = salt
                         current_user.iv = iv
+                        current_user.t_mpass_change = datetime.datetime.now()
                         db.session.commit()
                         return render_template("account.html", user = current_user, username = decrypt_aes(current_user.username))
 
@@ -84,6 +86,7 @@ def change_pass():
                         current_user.password = hash_pass
                         current_user.salt = salt
                         current_user.iv = iv
+                        current_user.t_mpass_change = datetime.datetime.now()
                         db.session.commit()
                         return render_template("account.html", user = current_user, username = decrypt_aes(current_user.username))
 

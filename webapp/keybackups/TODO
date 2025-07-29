@@ -1,10 +1,12 @@
 TODO:
     Geo-fencing
     Sorting passkeys(favourites, etc)
-    Vault stats
+    Breach dashboard
     RESTful API
     CLI stuff
+    flash notifications Alternative
     Yubikey
+    error handling
     Audit trail
     UI/UX
     Lock screen after inactivity

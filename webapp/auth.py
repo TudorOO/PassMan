@@ -78,7 +78,7 @@ def throw_pass_error(pass_check):
 def get_geolocation():
     # Get ip address from request
     if request.environ.get("HTTP_X_FORWARDED_FOR"):
-        ip = request.environ["HTTP_X_FORWARDER_FOR"].split(',')[0]
+        ip = request.environ["HTTP_X_FORWARDED_FOR"].split(',')[0]
     else:
         ip = request.remote_addr
     

@@ -3,7 +3,7 @@
 {% block content %} 
     <div class="page-wrapper overflow-hidden">
     <section class="banner-section position-relative d-flex align-items-end min-vh-100">
-      <video class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover" autoplay muted loop playsinline>
+      <video class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover" autoplay muted loop playsinline preload="none">
         <source src="../static/assets/videos/keyboard_typing_bg.mp4" type="video/mp4" />
       </video>
       <div class="container">
@@ -182,7 +182,8 @@
           <p class="mb-0 text-white text-opacity-70 text-md-end">© Passman copyright 2025</p>
         </div>
       </div>
+      <br><br><br>
+      <h3 class = " text-center mb-0 text-white text-opacity-70">Disclaimer: Passman is a learning project and should not be used for real-world password storage.</h1>
     </div>
   </footer>
-  <h3 class = "text-center">Disclaimer: Passman is a learning project and should not be used for real-world password storage.</h1>
 {%endblock%}

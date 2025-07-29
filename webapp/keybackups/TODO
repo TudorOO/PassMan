@@ -1,5 +1,4 @@
 TODO:
-    HTMX Passkey decrypting(with live key derivation visualizer)is i
     Geo-fencing
     Sorting passkeys(favourites, etc)
     Vault stats
@@ -9,7 +8,6 @@ TODO:
     Audit trail
     UI/UX
     Lock screen after inactivity
-
 
 BIG:
     browser-extension

@@ -15,25 +15,37 @@
     </div>
 
     <br><br>
-
-    <h4>Two-Factor Authentication(
-        {% if user.twofa %}
-            <b style = "color: green;">Enabled</b> )</h4>
-            <a href = "/account/2fa">
-                <button type = "button" class = "btn btn-primary">Deactivate Two-Factor Authentication</button>
-            </a>
-        {%else%}
-            <b style = "color: red;">Disabled</b> )</h4>
-            <a href = "/account/2fa">
-                <button type = "button" class = "btn btn-primary">Activate Two-Factor Authentication</button>
-            </a>
-        {%endif%}
+        <h4 class = "text-center">Two-Factor Authentication(
+            {% if user.twofa %}
+                <b class = "text-center" style = "color: green;">Enabled</b> )</h4>
+                <div class="d-flex justify-content-center">
+                    <a class = "text-center" href = "/account/2fa">
+                        <button type = "button" class = "btn btn-primary">Deactivate Two-Factor Authentication</button>
+                    </a>
+                </div>
+            {%else%}
+                <b class = "text-center" style = "color: red;">Disabled</b> )</h4>
+                <div class="d-flex justify-content-center">
+                    <a class = "text-center" href = "/account/2fa">
+                        <button type = "button" class = "btn btn-primary">Activate Two-Factor Authentication</button>
+                    </a>
+                </div>
+            {%endif%}
+    </div>
 
     <br><br>
-    
-    <h4>Change Password(Re-encrypts everything)</h4>
-    <a href = "/account/change_pass"><button type = "button" class = "btn btn-primary ">Change Master Password</button></a>
+       
+    <h4 class="text-center">Change Password(Re-encrypts everything)</h4>
+    <div class="d-flex justify-content-center">
+        <a href = "/account/change_pass"><button type = "button" class = "btn btn-primary ">Change Master Password</button></a>
+    </div>
 
+    <br><br>
+
+    <h4 class="text-center">Download backup-file</h4>
+    <div class="d-flex justify-content-center">
+        <a class="btn btn-success" href="{{url_for('views.download')}}">Download</a>
+    </div>
 
     <script type = "text/javascript" src = "static/js/cse.js"></script>
 

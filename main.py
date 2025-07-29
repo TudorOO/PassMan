@@ -7,4 +7,4 @@ load_dotenv()
 
 if __name__ == "__main__":
     print("Starting server...")
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8000)), debug=True, ssl_context = ('cert.pem', 'key.pem'))

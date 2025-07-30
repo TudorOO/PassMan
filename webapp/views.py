@@ -108,10 +108,12 @@ def download():
     if request.method == "POST":
         if check_password_hash(current_user.password, request.form.get("mpass")):
             path = "webapp/keybackups/key_" + str(current_user.id) + ".json"
-            if os.path.isfile(path):
+            if os.path.isfile(path) and  not current_user.bufile_downloaded:
+                current_user.bufile_downloaded = 1
+                db.session.commit()
                 return send_file(path, as_attachment=True, download_name = "passman_backup.key")
             else:
-                return "File not generated. Contact support to fix.", 404
+                return "File already downloaded. Contact support if you want another.", 401
         else:
             return "Wrong master password!", 401
 

@@ -26,6 +26,7 @@ class User(db.Model, UserMixin):
     t_mpass_change = db.Column(db.DateTime)
     last_login = db.Column(db.String(50), default="Unknown")
 
+    bufile_downloaded = db.Column(db.Boolean, default=0)
 
     twofa = db.Column(db.Boolean(), default = 0)
     twofa_key = db.Column(db.String(34))

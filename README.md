@@ -30,18 +30,18 @@ PassMan is a privacy-first, open-source password manager built with Flask, SQLit
 
 ## ✨ Features
 
-- 🧠 Master password with AES-GCM + Argon2id key derivation
-- 🔐 Client-side encryption with WebCrypto API
-- 🌐 TOTP 2FA support with QR code provisioning
-- 📦 Encrypted backup files (one-time download)
-- 🔎 Breach check integration with HaveIBeenPwned (k-anonymity API)
-- 🔄 Password reset with master key recovery or backup file
-- 🧹 Automatic key re-encryption on master password change
-- 🧪 Password strength verification with real-time feedback
-- 📱 Mobile-friendly UI with Bootstrap
-- 💨 HTMX-powered UI for smooth, dynamic interactions
-- 🔔 Toastify notifications for success and error messages
-- 💥 Secure by default (CSRF, sessions, content security headers)
+- 🧠 Master password with AES-GCM + Argon2id key derivation  
+- 🔐 Client-side encryption with WebCrypto API  
+- 🌐 TOTP 2FA support with QR code provisioning  
+- 📦 Encrypted backup files (one-time download)  
+- 🔎 Breach check integration with HaveIBeenPwned (k-anonymity API)  
+- 🔄 Password reset with master key recovery or backup file  
+- 🧹 Automatic key re-encryption on master password change  
+- 🧪 Password strength verification with real-time feedback  
+- 📱 Mobile-friendly UI with Bootstrap  
+- 💨 HTMX-powered UI for smooth, dynamic interactions  
+- 🔔 Toastify notifications for success and error messages  
+- 💥 Secure by default (CSRF, sessions, content security headers)  
 
 ---
 
@@ -62,14 +62,11 @@ cp .env.example .env
 
 # Run the app
 python3 main.py
-```
----
 
-### 🐳 Docker Setup (Recommended)
+🐳 Docker Setup (Recommended)
 
 If you prefer isolation and easier deployment, use Docker:
 
-```bash
 git clone https://github.com/TudorOO/PassMan.git
 cd PassMan
 
@@ -123,4 +120,3 @@ PassMan is a security-focused project developed for learning, portfolio building
 📄 License
 
 MIT License — do what you want, just don't sell it as yours.
-

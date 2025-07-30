@@ -14,8 +14,8 @@ PassMan is a privacy-first, open-source password manager built with Flask, SQLit
 
 > Place screenshots in `docs/screenshots/` and adjust paths below if needed.
 
-### 🔐 Login
-![Login](docs/screenshots/login.png)
+### 🔐 Landing Page
+![Landing Page](docs/screenshots/land.png)
 
 ### 📋 Vault UI
 ![Vault](docs/screenshots/vault.png)
@@ -23,8 +23,12 @@ PassMan is a privacy-first, open-source password manager built with Flask, SQLit
 ### 🛡️ TOTP Setup
 ![TOTP](docs/screenshots/totp.png)
 
-### 💾 Backup Download
-![Backup](docs/screenshots/backup.png)
+### 💾 Register
+![Register](docs/screenshots/backup.png)
+
+### 💾 Dashboard
+![Dashboard](docs/screenshots/dashboard.png)
+
 
 ---
 
@@ -74,6 +78,8 @@ docker run --env-file .env -p 8000:8000 passman
 
 Visit http://localhost:8000 in your browser.
 
+---
+
 ## 🧠 Security Highlights
 - 🔒 Zero-Knowledge Encryption: Server never sees your decrypted data
 
@@ -84,6 +90,9 @@ Visit http://localhost:8000 in your browser.
 - 🛡️ CSRF-Protected Forms: Everywhere
 
 - 📜 Content Security Policy: Basic headers set
+
+---
+
 ## 🛠️ Roadmap Ideas
 - 🔁 Password auto-rotation support
 
@@ -94,6 +103,9 @@ Visit http://localhost:8000 in your browser.
 - 🔐 YubiKey / WebAuthn integration
 
 - 🧾 Audit log for security events
+
+---
+
 ## 🤝 Contributing
 
 Pull requests and suggestions are always welcome! Whether it's UI polish, crypto audits, or feature ideas — feel free to fork and submit a PR.

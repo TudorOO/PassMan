@@ -9,6 +9,7 @@ class Passkey(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     key = db.Column(db.String(300))
     breaches = db.Column(db.Integer, default=0)
+    lastUpdate = db.Column(db.DateTime)
     salt = db.Column(db.String(200))
     app = db.Column(db.String(150))
     date = db.Column(db.DateTime(timezone = True), default = func.now())

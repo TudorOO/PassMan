@@ -1,0 +1,30 @@
+{% if result %}
+<table class = "table">
+            <thead class = "thead-dark">
+                <tr>
+                    <th scope = "col">#</th>
+                    <th scope = "col">App</th>
+                    <th scope = "col">Number of breaches ({{result.total}})</th>
+                    <th scope = "col">Last change</th>
+                    <th scope = "col">Recommended action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for key in user.keys%}
+
+                    <tr>
+                        <th scope = "row">{{key.id}}</th>
+                        <td>{{key.app}}</td>
+                        <td>{{result.result[key.app]}}</td>
+                        <td>{{key.lastUpdate.replace(microsecond=0)}}</td>
+                        {% if key.breaches < 2%}
+                            <td>Nothing :)</td>
+                        {% else %}
+                            <td>Reset immediatly!</td>
+                        {% endif %}
+                    </tr>
+
+                {%endfor%}
+            </tbody>
+</table>
+{% endif %}

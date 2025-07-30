@@ -63,15 +63,15 @@ def verify_password(p):
 # Throw password error
 def throw_pass_error(pass_check):
     if pass_check["length_error"]:
-        flash("Password too short!")
+        return "Password too short!", 400
     if pass_check["digit_error"]:
-        flash("Password must contain a digit")
+        return "Password must contain a digit", 400
     if pass_check["uppercase_error"]:
-        flash("Password must contain a uppercase letter")
+        return "Password must contain a uppercase letter", 400
     if pass_check["lowercase_error"]:
-        flash("Password must contain a lowercase letter")
+        return "Password must contain a lowercase letter", 400
     if pass_check["symbol_error"]:
-        flash("Password must contain a special symbol(#$%^@#!)")
+        return "Password must contain a special symbol(#$%^@#!)", 400
 
 
 # Get geolocation from request
@@ -175,24 +175,24 @@ def logout():
 def twofaCheck():
     user_id = session.get("2fa_user_id")
     if not user_id:
-        flash("Session expired, please log in again.")
+        flash("Session expired, please log in again.", category="error")
         return redirect(url_for("auth.login"))
     user = User.query.get(user_id)
 
     if not user:
-        flash("Invalid user.")
+        flash("Invalid user.", category="error")
         return redirect(url_for("auth.login"))
 
     if request.method == "POST":
         authCode = request.form.get("authCode").replace(" ", "")
         totp = pyotp.TOTP(user.twofa_key)
         if totp.verify(authCode):
-            flash("Logged in successfully!", category="success")
+            flash ("Logged in successfully!", category="susccess")
             login_user(user, remember = False)
             session.permanent = True
             return redirect(url_for("views.home"))
         else:
-            flash("Wrong authenticatior code!")
+            return "Wrong authenticatior code!", 401
     return render_template("twofa_check.html", user = user)
 
 # Login route
@@ -226,7 +226,7 @@ def login():
                         return redirect(url_for("views.home"))
 
                 else:
-                    flash("Incorrect password, try again.", category="error")
+                    return "Incorrect password, try again.", 401
             # Backup file Login
             if file:
                 print("Found backup-file")
@@ -237,17 +237,17 @@ def login():
                     session.permanent = True
                     return redirect(url_for("views.home"))
                 else:
-                    flash("File provided incorrect.", category="error")
+                    return "File provided incorrect.", 401
 
         else:
-            flash("No account registered on that email!", category="error")
+            return "No account registered on that email!", 401
     print("Sending back to login!")
     return render_template("login.html", user=current_user)
 
 
 # Register Route
 @auth.route("/register", methods=["GET", "POST"])
-@limiter.limit("5 per hour")
+@limiter.limit("20 per hour")
 def register():
     if request.method == "POST":
         email = request.form.get("email")
@@ -262,54 +262,51 @@ def register():
 
         # Verify register input
         if user:  # One account per email
-            flash("Email already has a registered account!", category="error")
+            return "Email already has a registered account!", 401
         elif len(email) < 4:  # Email length > 4
-            flash("Email must be greater than 4 characters! ", category="error")
+            return "Email must be greater than 4 characters! ", 400
         elif len(username) < 2:  # Username name length > 2
-            flash("Username too short! ", category="error")
+            return "Username too short! ", 400
         elif pass1 != pass2:
-            flash("Passwords do not match!", category="error")
+            return "Passwords do not match!", 400
         else:
-            pass_check = verify_password(pass1)
-            if pass_check["password_ok"]:
-                hashpass = generate_password_hash(pass1, method="scrypt")
+            print("Password has been checked")
+            hashpass = generate_password_hash(pass1, method="scrypt")
 
-                # Create new user
-                new_user = User(
-                    email=encrypt_aes(email),
-                    username=encrypt_aes(username),
-                    password=hashpass,
-                    salt=salt,
-                    iv = iv,
-                    enc_method = "AES-GCM with Argon2id derivation",
-                    t_update = datetime.datetime.now(),
-                    t_mpass_change = datetime.datetime.now(),
-                    last_login = get_geolocation()
-                )
+            # Create new user
+            new_user = User(
+                email=encrypt_aes(email),
+                username=encrypt_aes(username),
+                password=hashpass,
+                salt=salt,
+                iv = iv,
+                enc_method = "AES-GCM with Argon2id derivation",
+                t_update = datetime.datetime.now(),
+                t_mpass_change = datetime.datetime.now(),
+                last_login = get_geolocation()
+            )
 
-                # Add user to database and login
-                db.session.add(new_user)
-                db.session.commit()
-                login_user(new_user, remember=False)
-                session.permanent = True
+            # Add user to database and login
+            db.session.add(new_user)
+            db.session.commit()
+            login_user(new_user, remember=False)
+            session.permanent = True
 
-                # Generate backup data
-                backup = generate_backup_file(pass1)
+            # Generate backup data
+            backup = generate_backup_file(pass1)
 
-                # Generate backup file
-                root = os.path.realpath(__file__)[:-len(os.path.basename(__file__))]
-                with open(
-                    root + "keybackups/key_"
-                    + str(new_user.id)
-                    + ".json",
-                    "w",
-                ) as file_out:
-                    json.dump(backup, file_out)
+            # Generate backup file
+            root = os.path.realpath(__file__)[:-len(os.path.basename(__file__))]
+            with open(
+                root + "keybackups/key_"
+                + str(new_user.id)
+                + ".json",
+                "w",
+            ) as file_out:
+                json.dump(backup, file_out)
 
-                flash("Account created!", category="success")
-                return redirect(url_for("views.home"))
-            else:
-                throw_pass_error(pass_check)
+            flash("Account created!", category="success")
+            return redirect(url_for("views.home"))
     return render_template("register.html", user=current_user)
 
 
@@ -349,7 +346,7 @@ def reset_token(token):
             salt = request.form.get("salt")
 
             if pass1 != pass2:
-                flash("Passwords do not match!", "error")
+                return "Passwords do not match!", 400
             else:
                 pass_check = verify_password(pass1)
                 if pass_check["password_ok"]:

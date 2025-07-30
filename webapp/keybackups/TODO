@@ -1,14 +1,10 @@
 TODO:
-    Geo-fencing
     Sorting passkeys(favourites, etc)
-    Breach dashboard
+    home HTMX reveal/hide/delete system
     RESTful API
     CLI stuff
-    flash notifications Alternative
     Yubikey
-    error handling
     Audit trail
-    UI/UX
     Lock screen after inactivity
 
 BIG:

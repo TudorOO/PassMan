@@ -17,10 +17,10 @@ api = Blueprint("api", __name__)
 @login_required
 def get_breach_number():
     if request.method == "POST":
-
+        print("Getting breach number...")
         result = {}
         total = 0
-        mpass = request.form.get("mpass")
+        mpass = request.form.get("maspass")
         if check_password_hash(current_user.password, mpass):
             mpass = mpass.encode("utf-8")
             for key in current_user.keys:
@@ -48,6 +48,7 @@ def get_breach_number():
                     pwnd_dict[pwnd_hash[0]] = pwnd_hash[1]
                 if sha_postfix in pwnd_dict.keys():
                     result[key.app] = pwnd_dict[sha_password.upper()]
+                    key.breaches = pwnd_dict[sha_password.upper()]
                     total += pwnd_dict[sha_password.upper()]
                 else:
                     result[key.app] = 0
@@ -56,10 +57,10 @@ def get_breach_number():
                 "result": result
             }
             print(data)
-            return jsonify(data)
+            return render_template("breach_results.html", user = current_user, result = data)
         else:
             print("Wrong master password")
-            flash("Wrong master password", category="error")
+            return "Wrong master password", 401
             return render_template("account.html", user = current_user, username = decrypt_aes(current_user.username))
 
 

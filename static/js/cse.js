@@ -7,6 +7,18 @@ const encode = (data) => {
     return encoder.encode(data)
 }
 
+const checkPassword = (password) => {
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSymbol = /[~!@#$%^&*_+=\]\}\?><|]/.test(password);
+
+    if (hasUppercase && hasLowercase && hasNumber && hasSymbol) {
+        return 1;
+    }
+    return 0;
+}
+
 //Generate Iitialization vector for AES-GCM
 const generateIV = () => {
     return window.crypto.getRandomValues(new Uint8Array(12))
@@ -109,41 +121,60 @@ async function sendRegisterData(){
     var password1 = document.getElementById("password1").value;
     var password2 = document.getElementById("password2").value;
 
-    var key = await generateKey(password1, salt);
+    if(checkPassword(!password1)){
+        Toastify({
+            text: "Password too weak!",
+            duration: 3000,
+            gravity: "bottom",
+            position: "right",
+            backgroundColor: "#f44336"
+        }).showToast()
+    }else{
 
-    const enc1 = await encrypt(password1, key);
-    const enc2 = await encrypt(password2, key, enc1.iv);
-    const pack1 = pack(enc1.cypher);
-    const pack2 = pack(enc2.cypher);
+        var key = await generateKey(password1, salt);
 
-    const sentIV = pack(enc1.iv)
-    salt = pack(salt)
+        const enc1 = await encrypt(password1, key);
+        const enc2 = await encrypt(password2, key, enc1.iv);
+        const pack1 = pack(enc1.cypher);
+        const pack2 = pack(enc2.cypher);
 
-    const fd = new FormData();
-    fd.append("email", email);
-    fd.append("username", username);
-    fd.append("password1", pack1);
-    fd.append("password2", pack2);
-    fd.append("iv", sentIV);
-    fd.append("salt", salt);
-    fd.append("csrf_token", csrfToken);
+        const sentIV = pack(enc1.iv)
+        salt = pack(salt)
+
+        const fd = new FormData();
+        fd.append("email", email);
+        fd.append("username", username);
+        fd.append("password1", pack1);
+        fd.append("password2", pack2);
+        fd.append("iv", sentIV);
+        fd.append("salt", salt);
+        fd.append("csrf_token", csrfToken);
 
 
-    await fetch(
-        "/register",
-        {
-            method: "POST",
-            body: fd
-        }).then(response => {
-            if(response.redirected){
-                window.location.href = response.url;
-            }else{
-                response.text().then(text => {
-                    document.body.innerHTML = text;
-                });
-            }
-        })
-
+        await fetch(
+            "/register",
+            {
+                method: "POST",
+                body: fd
+            }).then(async response => {
+                        if(!response.ok){
+                            Toastify({
+                            text: await response.text() || "An unknown error occurred.",
+                            duration: 3000,
+                            gravity: "bottom",
+                            position: "right",
+                            backgroundColor: "#f44336"
+                        }).showToast()
+                        }else if(response.redirected){
+                            window.location.href = response.url;
+                            
+                        }else{
+                            response.text().then(text => {
+                                document.body.innerHTML = text;
+                            })
+                        }
+                    });
+    }
 }
 
 async function sendLoginData(){
@@ -176,15 +207,24 @@ async function sendLoginData(){
         {
             method: "POST",
             body: fd
-        }).then(response => {
-            if(response.redirected){
-                window.location.href = response.url;
-            }else{
-                response.text().then(text => {
-                    document.body.innerHTML = text;
+        }).then(async response => {
+                    if(!response.ok){
+                        Toastify({
+                        text: await response.text() || "An unknown error occurred.",
+                        duration: 3000,
+                        gravity: "bottom",
+                        position: "right",
+                        backgroundColor: "#f44336"
+                    }).showToast()
+                    }else if(response.redirected){
+                        window.location.href = response.url;
+                        
+                    }else{
+                        response.text().then(text => {
+                            document.body.innerHTML = text;
+                        })
+                    }
                 });
-            }
-        })
 
     }else{
         //Send file
@@ -201,15 +241,24 @@ async function sendLoginData(){
                 method: "POST",
                 body: fd,
             }
-        ).then(response => {
-            if(response.redirected){
-                window.location.href = response.url;
-            }else{
-                response.text().then(text => {
-                    document.body.innerHTML = text;
+        ).then(async response => {
+                    if(!response.ok){
+                        Toastify({
+                        text: await response.text() || "An unknown error occurred.",
+                        duration: 3000,
+                        gravity: "bottom",
+                        position: "right",
+                        backgroundColor: "#f44336"
+                    }).showToast()
+                    }else if(response.redirected){
+                        window.location.href = response.url;
+                        
+                    }else{
+                        response.text().then(text => {
+                            document.body.innerHTML = text;
+                        })
+                    }
                 });
-            }
-        })
 
     }
 
@@ -228,34 +277,52 @@ async function sendResetData(){
     const enc2 = await encrypt(password2, key, enc1.iv);
     const pack1 = pack(enc1.cypher);
     const pack2 = pack(enc2.cypher);
+     if(checkPassword(!password1)){
+        Toastify({
+            text: "Password too weak!",
+            duration: 3000,
+            gravity: "bottom",
+            position: "right",
+            backgroundColor: "#f44336"
+        }).showToast()
+    }else{
+        const sentIV = pack(enc1.iv);
+        salt = pack(salt);
 
-    const sentIV = pack(enc1.iv);
-    salt = pack(salt);
+        var fd = new FormData()
+        fd.append("password1", pack1);
+        fd.append("password2", pack2);
+        fd.append("salt", salt);
+        fd.append("iv", sentIV);
+        fd.append("csrf_token", csrf_token);
 
-    var fd = new FormData()
-    fd.append("password1", pack1);
-    fd.append("password2", pack2);
-    fd.append("salt", salt);
-    fd.append("iv", sentIV);
-    fd.append("csrf_token", csrf_token);
+        var url = new URL(window.location.href);
 
-    var url = new URL(window.location.href);
+        var partPaths = url.pathname.split('/');
+        var access_token = partPaths[partPaths.length - 1];
 
-    var partPaths = url.pathname.split('/');
-    var access_token = partPaths[partPaths.length - 1];
-
-    fetch("/reset/" + access_token,{
-        method: "POST",
-        body: fd,
-    }).then(response => {
-            if(response.redirected){
-                window.location.href = response.url;
-            }else{
-                response.text().then(text => {
-                    document.body.innerHTML = text;
-                });
-            }
-        })
+        fetch("/reset/" + access_token,{
+            method: "POST",
+            body: fd,
+        }).then(async response => {
+                        if(!response.ok){
+                            Toastify({
+                            text: await response.text() || "An unknown error occurred.",
+                            duration: 3000,
+                            gravity: "bottom",
+                            position: "right",
+                            backgroundColor: "#f44336"
+                        }).showToast()
+                        }else if(response.redirected){
+                            window.location.href = response.url;
+                            
+                        }else{
+                            response.text().then(text => {
+                                document.body.innerHTML = text;
+                            })
+                        }
+                    });
+    }
 }
 
 async function sendKeyDialog(command, id){
@@ -288,27 +355,45 @@ async function sendKeyDialog(command, id){
         await fetch('/home', {
             method: 'POST',
             body: fd,
-        }).then(response => {
-        if(response.redirected){
-            window.location.href = response.url;
-        }else{
-            response.text().then(text => {
-                document.body.innerHTML = text;
-            });
-        }
-        })
+        }).then(async response => {
+                    if(!response.ok){
+                        Toastify({
+                        text: await response.text() || "An unknown error occurred.",
+                        duration: 3000,
+                        gravity: "bottom",
+                        position: "right",
+                        backgroundColor: "#f44336"
+                    }).showToast()
+                    }else if(response.redirected){
+                        window.location.href = response.url;
+                        
+                    }else{
+                        response.text().then(text => {
+                            document.body.innerHTML = text;
+                        })
+                    }
+                })
     }else{
         await fetch('/home', {
             method: 'POST',
             body: fd,
-        }).then(response => {
-        if(response.redirected){
-            window.location.href = response.url;
-        }else{
-            response.text().then(text => {
-                document.body.innerHTML = text;
-            });
-        }
-        })
+        }).then(async response => {
+                    if(!response.ok){
+                        Toastify({
+                        text: await response.text() || "An unknown error occurred.",
+                        duration: 3000,
+                        gravity: "bottom",
+                        position: "right",
+                        backgroundColor: "#f44336"
+                    }).showToast()
+                    }else if(response.redirected){
+                        window.location.href = response.url;
+                        
+                    }else{
+                        response.text().then(text => {
+                            document.body.innerHTML = text;
+                        })
+                    }
+                });
     }
 }

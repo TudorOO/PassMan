@@ -2,65 +2,73 @@
 {% block title %}PassMan{% endblock %}
 {% block content %} 
 
-    <form method = "POST">
+    <form method = "POST" class = "d-flex flex-column">
     <input type = "hidden" id = "csrf_token" name = "csrf_token" value = "{{csrf_token()}}"/>
     <input type = "hidden" id = "user_id" name = "user_id" value = "{{user.id}}"/>
-    <h3 align = "center">Change Master Password</h3>
-    <h5 align = "center">Will re-encrypt all passkeys</h5>
+    <h3 align = "center" class = "mb-4 mt-7">Change Master Password</h3>
+    <h5 align = "center" class = "mb-0">Will re-encrypt all passkeys</h5>
     <h5 align = "center">All previously generated backup files will be unusable</h5>
-    <div class = "form-group">
-        <label for = "password1">New Master Password</label>
-        <input 
-            type = "password" 
-            class = "form-control" 
-            id="password1" name="password1" 
-            placeholder="Enter password"
-        >
+    <div class = "form-group text-center mt-5">
+        <label for = "password1"><b>New Master Password</b></label>
+        <div class = "mx-auto w-20">
+            <input 
+                type = "password" 
+                class = "form-control border-bottom text-center" 
+                id="password1" name="password1" 
+                placeholder="Enter password"
+            >
+        </div>
     </div>
 
-    <b><p id = "message" style = "display: none; color: #595959; margin-bottom: 6px;margin-top: 6px;"">Password is <span id = "strength"></span></p></b>
-    <p id = "check1" style = "display: none; color: #595959; margin: 0px;">At least 8 characters</p>
-    <p id = "check2" style = "display: none; color: #595959; margin: 0px;">At least one lowercase letter(a-z)</p>
-    <p id = "check3" style = "display: none; color: #595959; margin: 0px;">At least one uppercase letter(A-Z)</p>
-    <p id = "check4" style = "display: none; color: #595959; margin: 0px;">At least one digit(0-9)</p>
-    <p id = "check5" style = "display: none; color: #595959; margin: 0px; margin-bottom: 7px">At least one special character(~!@#$%^&*_+=}]?><|)</p>
+    <b><p id = "message" class = "text-center" style = "display: none; color: #595959; margin-bottom: 6px;margin-top: 6px;"">Password is <span id = "strength"></span></p></b>
+    <p id = "check1" class = "text-center" style = "display: none; color: #595959; margin: 0px;">At least 8 characters</p>
+    <p id = "check2" class = "text-center" style = "display: none; color: #595959; margin: 0px;">At least one lowercase letter(a-z)</p>
+    <p id = "check3" class = "text-center" style = "display: none; color: #595959; margin: 0px;">At least one uppercase letter(A-Z)</p>
+    <p id = "check4" class = "text-center" style = "display: none; color: #595959; margin: 0px;">At least one digit(0-9)</p>
+    <p id = "check5" class = "text-center" style = "display: none; color: #595959; margin: 0px; margin-bottom: 7px">At least one special character(~!@#$%^&*_+=}]?><|)</p>
 
-    <div class = "form-group">
-        <label for = "password2">New Master Password (Confirm)</label>
-        <input 
-            type = "password" 
-            class = "form-control" 
-            id="password2" name="password2" 
-            placeholder="Confirm password"
-        >
+    <div class = "form-group text-center mt-5 mb-8">
+        <label for = "password2"><b>New Master Password (Confirm)</b></label>
+        <div class = "mx-auto w-20">
+            <input 
+                type = "password" 
+                class = "form-control border-bottom text-center" 
+                id="password2" name="password2" 
+                placeholder="Confirm password"
+            >
+        </div>
     </div>
 
     <br>
 
-    <h5>Verification</h5>
+    <h4 class = "text-center">Verification</h4>
 
     <br>
 
-    <div class = "form-group">
-        <label for = "master_password">Master Password</label>
-        <input
-            type = "password"
-            class = "form-control"
-            id = "master_password" name = "master_password"
-            placeholder = "Master Password">
+    <div class = "form-group text-center mt-5">
+        <label for = "master_password"><b>Old Master Password</b></label>
+        <div class = "mx-auto w-20">
+            <input
+                type = "password"
+                class = "form-control text-center border-bottom"
+                id = "master_password" name = "master_password"
+                placeholder = "Master Password">
+        </div>
     </div>
-    <br><h6>OR</h6><br>
+    <br><h5 class = "text-center mt-7">OR</h5><br>
     
-    <div class = "form-group">
+    <div class = "form-group text-center">
         <label for = "backup_file">Backup File <b>(WARNING: WILL DELETE ALL PASKEYS!)</b></label>
         <input
             type = "file"
-            class = "form-control"
+            class = "form-control text-center"
             id = "backup_file" name = "backup_file"
             placeholder = "Master Password">
     </div>
 
-    <button type="button" id  = "change_password" class = "btn btn-primary">Send Reset</button>
+    <div class = "d-flex justify-content-center">
+        <button type="button" id  = "change_password" class = "btn btn-primary mt-4">Send Reset</button>
+    </div>
 </form>
 
 
@@ -70,7 +78,6 @@
 
 
 <script>
-    console.log("asaaaa")
     document.addEventListener("DOMContentLoaded", function() {
         console.log("Event listner attached...")
 
@@ -80,87 +87,122 @@
             const password1 = document.getElementById("password1").value;
             const password2 = document.getElementById("password2").value;
             const csrfToken = document.getElementById("csrf_token").value;
+            const fileInput = document.getElementById("backup_file").files[0];
 
-            const id = Number(document.getElementById("user_id").value);
-
-            fd = new FormData()
-            fd.append("csrf_token", csrfToken);
-
-            //Encrypt new password with new random salt
-            var salt = window.crypto.getRandomValues(new Uint8Array(12))
-            var key = await generateKey(password1, salt);
-
-            const enc1 = await encrypt(password1, key);
-            const enc2 = await encrypt(password2, key, enc1.iv);
-            const pack1 = pack(enc1.cypher);
-            const pack2 = pack(enc2.cypher);
-
-            const sentIV = pack(enc1.iv)
-            salt = pack(salt)
-
-            fd.append("pass1", pack1);
-            fd.append("pass2", pack2);
-            fd.append("iv", sentIV);
-            fd.append("salt", salt);
-
-            if(mpassword != ""){
-                //Encrypt and send old password
-                ivsalt = await get_salt_iv(EMAIL = undefined, ID = id,  TOKEN = csrfToken);
-                const msalt = ivsalt.salt;
-                const miv = ivsalt.iv;
-
-                console.log("Master password sent: " + mpassword)
-                console.log("Master salt: " + pack(msalt))
-                console.log("Master iv: " + pack(miv))
-
-                const mkey = await generateKey(mpassword, msalt);
-                var menc = await encrypt(mpassword, mkey, miv)
-                const mpack = pack(menc.cypher);
-
-                console.log("Mpacksent: " + mpack)
-
-                fd.append("master_password", mpack);
-
-                await fetch(
-                "/account/change_pass",
-                {
-                    method: "POST",
-                    body: fd,
-                }).then(response => {
-                    if(response.redirected){
-                        window.location.href = response.url;
-                    }else{
-                        response.text().then(text => {
-                            document.body.innerHTML = text;
-                        });
-                    }
-                })
-
+             if(checkPassword(!password1)){
+                Toastify({
+                    text: "Password too weak!",
+                    duration: 3000,
+                    gravity: "bottom",
+                    position: "right",
+                    backgroundColor: "#f44336"
+                }).showToast()
             }else{
-                //Send file
+                const id = Number(document.getElementById("user_id").value);
 
-                const fileInput = document.getElementById("backup_file").files[0];
-                fd.append("backup-file", fileInput);
+                fd = new FormData()
+                fd.append("csrf_token", csrfToken);
 
-                await fetch( 
-                    '/account/change_pass', {
+                //Encrypt new password with new random salt
+                var salt = window.crypto.getRandomValues(new Uint8Array(12))
+                var key = await generateKey(password1, salt);
+
+                const enc1 = await encrypt(password1, key);
+                const enc2 = await encrypt(password2, key, enc1.iv);
+                const pack1 = pack(enc1.cypher);
+                const pack2 = pack(enc2.cypher);
+
+                const sentIV = pack(enc1.iv)
+                salt = pack(salt)
+
+                fd.append("pass1", pack1);
+                fd.append("pass2", pack2);
+                fd.append("iv", sentIV);
+                fd.append("salt", salt);
+
+                if(mpassword != ""){
+                    //Encrypt and send old password
+                    ivsalt = await get_salt_iv(EMAIL = undefined, ID = id,  TOKEN = csrfToken);
+                    const msalt = ivsalt.salt;
+                    const miv = ivsalt.iv;
+
+                    console.log("Master password sent: " + mpassword)
+                    console.log("Master salt: " + pack(msalt))
+                    console.log("Master iv: " + pack(miv))
+
+                    const mkey = await generateKey(mpassword, msalt);
+                    var menc = await encrypt(mpassword, mkey, miv)
+                    const mpack = pack(menc.cypher);
+
+                    console.log("Mpacksent: " + mpack)
+
+                    fd.append("master_password", mpack);
+
+                    await fetch(
+                    "/account/change_pass",
+                    {
                         method: "POST",
                         body: fd,
-                    }
-                ).then(response => {
-                    if(response.redirected){
-                        window.location.href = response.url;
-                    }else{
-                        response.text().then(text => {
-                            document.body.innerHTML = text;
-                        });
-                    }
-                })
+                    }).then(async response => {
+                        if(!response.ok){
+                            Toastify({
+                            text: await response.text() || "An unknown error occurred.",
+                            duration: 3000,
+                            gravity: "bottom",
+                            position: "right",
+                            backgroundColor: "#f44336"
+                        }).showToast()
+                        }else if(response.redirected){
+                            window.location.href = response.url;
+                            
+                        }else{
+                            response.text().then(text => {
+                                document.body.innerHTML = text;
+                            })
+                        }
+                    })
 
+                }else if(fileInput){
+                    //Send file
+                    fd.append("backup-file", fileInput);
+
+                    await fetch( 
+                        '/account/change_pass', {
+                            method: "POST",
+                            body: fd,
+                        }
+                    ).then(async response => {
+                        if(!response.ok){
+                            Toastify({
+                            text: await response.text() || "An unknown error occurred.",
+                            duration: 3000,
+                            gravity: "bottom",
+                            position: "right",
+                            backgroundColor: "#f44336"
+                        }).showToast()
+                        }else if(response.redirected){
+                            window.location.href = response.url;
+                            
+                        }else{
+                            response.text().then(text => {
+                                document.body.innerHTML = text;
+                            })
+                        }
+                    })
+
+                }else{
+                    Toastify({
+                            text: "Please enter either a password or a backup file!",
+                            duration: 2000,
+                            gravity: "bottom",
+                            position: "right",
+                            backgroundColor: "#f44336"
+                        }).showToast();
+                }
             }
         }
-        document.getElementById("change_password").addEventListener("click", changeMasterPassword);
-    });
+            document.getElementById("change_password").addEventListener("click", changeMasterPassword);
+        });
 </script>
 
 {%endblock%}

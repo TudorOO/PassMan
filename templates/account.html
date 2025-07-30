@@ -37,12 +37,83 @@
 
     <h4 class="text-center">Download backup-file</h4>
     <div class="d-flex justify-content-center">
-        <a class="btn btn-success" href="{{url_for('views.download')}}">Download</a>
+        <a class="btn btn-success" 
+        onclick = "showMasterModal()">Download</a>
     </div>
 
     <script type = "text/javascript" src = "static/js/cse.js"></script>
 
     <script>
+
+        async function downloadbackup(){
+            const csrfToken = document.getElementById("csrf_token").value;
+            const id = document.getElementById("user_id").value;
+            const maspass = document.getElementById("maspass").value;
+
+            var salt, iv;
+            ivsalt = await get_salt_iv(EMAIL = undefined, ID = id,  TOKEN = csrfToken);
+            salt = ivsalt.salt;
+            iv = ivsalt.iv;
+
+            const key = await generateKey(maspass, salt);
+            var enc1 = await encrypt(maspass, key, iv=iv);
+            const pack1 = pack(enc1.cypher);
+
+            let fd = new FormData();
+            fd.append("csrf_token", csrfToken);
+            fd.append("mpass", pack1);
+
+            try{
+                const response = await fetch("/download_backup_file", {
+                    method: "POST",
+                    body: fd
+                });
+
+                if(!response.ok){
+
+                    const errorText = await response.text();
+                    closeDialog("mpass_dia");
+                    Toastify({
+                        text: errorText,
+                        duration: 3000,
+                        gravity: "bottom",
+                        position: "right",
+                        backgroundColor: "#f44336"
+                    }).showToast()
+                    return;
+                }
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "passman_backup.key";
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+
+
+                closeDialog("mpass_dia");
+                Toastify({
+                    text: "Backup key download successful!",
+                    duration: 3000,
+                    gravity: "bottom",
+                    position: "right",
+                    backgroundColor: "#4CAF50"
+                }).showToast();
+            } catch(e){
+                closeDialog("mpass_dia");
+                Toastify({
+                    text: "Network error or server unreacheable!",
+                    duration: 3000,
+                    gravity: "bottom",
+                    position: "right",
+                    backgroundColor: "#4CAF50"
+                }).showToast();
+            }
+        }
+
 
         function closeDialog(dialogID){
             const dia = document.getElementById(dialogID);
@@ -59,67 +130,38 @@
 
         function showMasterModal(){
             const popup = addHTML(`
-            <dialog id = "Masterdialog">
-                <button onclick = "closeDialog('Masterdialog')" type="button" class="btn-close" aria-label="Close"></button>
-                <form method = "POST" style = "display: inline;">
+            <dialog id = "mpass_dia">
+                <button onmouseover="this.style.color='white'" onmouseout="this.style.color=''" onclick = "closeDialog('mpass_dia')" type="button" class="btn-close" aria-label="Close"></button>
+                <form method = 'POST'>
+                    <input type = "hidden" id = "user_id" value = "{{user.id}}">
                     <input type = "hidden" name = "csrf_token" id = "csrf_token" value = "{{csrf_token()}}"/>
-                    <input type = "hidden" name = "user_id" id = "user_id" value = "{{user.id}}">
-                    <label for = "mpass">Master Password</label>
-                    <input
-                        type = "password"
-                        class = "form-control"
-                        id = "maspass" name = "maspass"
-                        placeholder = "Enter Master Password"
-                    >
-                    <button class = "btn btn-primary" 
-                        type = "button" 
-                        name = "submit_button" 
-                        onclick = "FetchBreachNumber()">Show</button>
-                </form>
+                    <h3 class = "mt-2 mb-7 text-center">Master Password</h3>
+                    <div class = "form-group text-center">
+                        <input
+                            type = "password"
+                            class = "form-control border-bottom mb-4 text-center"
+                            id = "maspass" name = "maspass"
+                            placeholder = "Enter Master Password"
+                        >
+                    </div>
+                    <div class="d-flex justify-content-center" id="lastFormElement">
+                        <button class = "btn btn-primary position-relative" onmouseover="this.style.color='white'" onmouseout="this.style.color=''"
+                            type = "button" 
+                            name = "submit_button" 
+                            id = "submit_buttonForm"
+                            onclick = "downloadbackup()"
+                        value = "New Passkey">Search</button>
+                        <span class = "loader" id = "loader" style="display: none;"></span>
+                    </div>
+                </form> 
             </dialog>`);
             document.body.appendChild(popup);
-            const dia = document.getElementById("Masterdialog");
+            const dia = document.getElementById("mpass_dia");
             dia.showModal();
         }
 
-        async function FetchBreachNumber(){
-            fd = new FormData();
-            csrfToken = document.getElementById("csrf_token").value;
-            mpass = document.getElementById("maspass").value;
-            id = Number(document.getElementById("user_id").value);
 
-            //Encrypt master password
-            ivsalt = await get_salt_iv(EMAIL = undefined, ID = id,  TOKEN = csrfToken);
-            salt = ivsalt.salt;
-            iv = ivsalt.iv;
-            const key = await generateKey(mpass, salt);
-            var enc1 = await encrypt(mpass, key, iv=iv)
-            const pack1 = pack(enc1.cypher);
-
-            fd.append("csrf_token", csrfToken);
-            fd.append("mpass", pack1);
-
-            await fetch("/api/get_breach_number", {
-                method: "POST",
-                body: fd,
-            }).then(async response => {
-                closeDialog("Masterdialog");
-                const data = await response.json();
-                console.log(data)
-                var div = document.getElementById("Change_Button");
-                div.removeChild(document.getElementById("ShowButton"));
-                div.innerHTML = '<h4 class = "text-center"><b style = "color: red;">' + data.total + `</b></h4>`;
-                const container = document.getElementById("breach_monitor");
-
-                for(const [app, count] of Object.entries(data.result)){
-                    if(count > 0){
-                        const p = addHTML(`
-                        <h5 class = "text-center" style = "color: red;">Password for ${app} has been found in ${count} data breach(es). It should be reset!`);
-                        container.appendChild(p);
-                    }
-                }
-            });
-        }
+        
     </script>
 
 

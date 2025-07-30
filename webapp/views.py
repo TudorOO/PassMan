@@ -72,6 +72,7 @@ def create_passkey(app, mpass):
         key=ciphered_key,
         user_id=current_user.id,
         salt=salt.hex(),
+        lastUpdate = datetime.datetime.now()
     )
 
     current_user.t_update = datetime.datetime.now()
@@ -99,15 +100,20 @@ def decrypt_passkey(encrypted_str, encryption_key, app):
 
 
 
+
 # Download backup file
-@views.route("/download")
+@views.route("/download_backup_file", methods = ["POST", "GET"])
 @login_required
 def download():
-    path = "webapp/keybackups/key_" + str(current_user.id) + ".json"
-    if os.path.isfile(path):
-        return send_file(path, as_attachment=True)
-    else:
-        flash("Backup key not generated. Please try again!")
+    if request.method == "POST":
+        if check_password_hash(current_user.password, request.form.get("mpass")):
+            path = "webapp/keybackups/key_" + str(current_user.id) + ".json"
+            if os.path.isfile(path):
+                return send_file(path, as_attachment=True, download_name = "passman_backup.key")
+            else:
+                return "File not generated. Contact support to fix.", 404
+        else:
+            return "Wrong master password!", 401
 
 
 # Search for specific passkey(HTMX)
@@ -143,14 +149,14 @@ def home():
                     if Passkey.query.filter_by(
                         app=app, user_id=current_user.id
                     ).first():  # Check if app already listed
-                        flash("Passkey already created for " + app)
+                        return "Passkey already created for ", 401
                     else:
                         # Create random key
                         # Encrypt using master password + salt
                         # Store key as Passkey object linked to user object.
                         create_passkey(app, mpass)
             else:
-                flash("Wrong master password!", category="error")
+                return "Wrong master password!", 401
 
         elif request.form["submit_button"][0] == "D":  # DELETE PASSKEY
             pass_id = int(request.form["submit_button"][1:])
@@ -190,7 +196,7 @@ def home():
                 )
 
             else:
-                flash("Incorrect master password", "error")
+                return "Incorrect master password", 401
 
         elif request.form["submit_button"][0] == "H":  # ENCRYPT PASSKEY
             pass

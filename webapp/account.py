@@ -36,12 +36,6 @@ def change_pass():
         file = request.files.get("backup-file")
         print("POST Request to /account/change_pass")
         if master_password:
-            mass_hash = generate_password_hash(master_password, method="scrypt")
-            print("Master hash new: " + mass_hash)
-            print("Master hash old: " + current_user.password)
-
-            print("Master salt: " + current_user.salt)
-            print("Master iv: " + current_user.iv)
             if(check_password_hash(current_user.password, master_password)):
                 print("Sending to change_pass, with password")
                 password1 = request.form.get("pass1")
@@ -50,7 +44,7 @@ def change_pass():
                 iv = request.form.get("iv")
                 
                 if password1 != password2:
-                    flash("Passwords do not match!", "error")
+                    return "Passwords do not match!", 400 
                 else:
                     pass_check = verify_password(password1)
                     if pass_check["password_ok"]:
@@ -67,7 +61,8 @@ def change_pass():
                     else:
                         throw_pass_error(pass_check)
             else:
-                flash("Wrong master password.", category="error")
+                print("Wrong master password!")
+                return "Wrong master password!", 401
         elif file:
             if verify_backup_file(file):
                 password1 = request.form.get("pass1")
@@ -76,7 +71,7 @@ def change_pass():
                 iv = request.form.get("iv")
                 
                 if password1 != password2:
-                    flash("Passwords do not match!", "error")
+                    return "Passwords do not match!", 400 
                 else:
                     pass_check = verify_password(password1)
                     if pass_check["password_ok"]:
@@ -94,7 +89,7 @@ def change_pass():
                         throw_pass_error(pass_check)
                 return render_template("change_pass.html", user = current_user, username = decrypt_aes(current_user.username))
             else:
-                flash("File provided incorrect.", category="error")
+                return "Invalid backup file", 401
     return render_template("change_pass.html", user = current_user, username = decrypt_aes(current_user.username))
 
 

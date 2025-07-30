@@ -75,25 +75,25 @@ docker run --env-file .env -p 8000:8000 passman
 Visit http://localhost:8000 in your browser.
 
 ## 🧠 Security Highlights
-    🔒 Zero-Knowledge Encryption: Server never sees your decrypted data
+- 🔒 Zero-Knowledge Encryption: Server never sees your decrypted data
 
-    🔐 TOTP Two-Factor Auth: With QR provisioning
+- 🔐 TOTP Two-Factor Auth: With QR provisioning
 
-    🚨 Password Breach Checker: Know if your credentials have been compromised
+- 🚨 Password Breach Checker: Know if your credentials have been compromised
 
-    🛡️ CSRF-Protected Forms: Everywhere
+- 🛡️ CSRF-Protected Forms: Everywhere
 
-    📜 Content Security Policy: Basic headers set
+- 📜 Content Security Policy: Basic headers set
 ## 🛠️ Roadmap Ideas
-    🔁 Password auto-rotation support
+- 🔁 Password auto-rotation support
 
-    📱 PWA support (Installable web app)
+- 📱 PWA support (Installable web app)
 
-    🧩 Browser extension
+- 🧩 Browser extension
 
-    🔐 YubiKey / WebAuthn integration
+- 🔐 YubiKey / WebAuthn integration
 
-    🧾 Audit log for security events
+- 🧾 Audit log for security events
 ## 🤝 Contributing
 
 Pull requests and suggestions are always welcome! Whether it's UI polish, crypto audits, or feature ideas — feel free to fork and submit a PR.

@@ -10,6 +10,24 @@ PassMan is a privacy-first, open-source password manager built with Flask, SQLit
 
 ---
 
+## 📸 Screenshots
+
+> Place screenshots in `docs/screenshots/` and adjust paths below if needed.
+
+### 🔐 Login
+![Login](docs/screenshots/login.png)
+
+### 📋 Vault UI
+![Vault](docs/screenshots/vault.png)
+
+### 🛡️ TOTP Setup
+![TOTP](docs/screenshots/totp.png)
+
+### 💾 Backup Download
+![Backup](docs/screenshots/backup.png)
+
+---
+
 ## ✨ Features
 
 - 🧠 Master password with AES-GCM + Argon2id key derivation
@@ -26,27 +44,6 @@ PassMan is a privacy-first, open-source password manager built with Flask, SQLit
 - 💥 Secure by default (CSRF, sessions, content security headers)
 
 ---
-
-## 📸 Screenshots
-
-> Add these screenshots to the `/docs/screenshots/` folder and reference them here.
-
-### 🔐 Login
-
-![Login Screen](docs/screenshots/login.png)
-
-### 📋 Vault UI
-
-![Vault UI](docs/screenshots/vault.png)
-
-### 🛡️ TOTP Setup
-
-![TOTP QR Code Setup](docs/screenshots/totp.png)
-
-### ⚙️ Backup Download
-
-![Backup Download](docs/screenshots/backup.png)
-
 
 ## 🚀 Setup
 
@@ -71,7 +68,7 @@ python3 main.py
 git clone https://github.com/TudorOO/PassMan.git
 cd PassMan
 
-Create a .env file:
+Create a .env file in the root directory:
 
 SECRET_KEY=my_secret_key
 MAIL_SERVER=smtp.gmail.com
@@ -82,14 +79,12 @@ AESGCM_CHECK_KEY=my_aesgcm (256 bits)
 AESGCM_META_KEY=my_aesgcm_meta
 AESGCM_META_NONCE=my_aesgcm_meta_nonce
 
-Build and run:
+Then build and run the container:
 
 docker build -t passman .
 docker run --env-file .env -p 8000:8000 passman
 
-Access the app:
-
-👉 http://localhost:8000
+Visit http://localhost:8000 in your browser.
 🧠 Security Highlights
 
     🔒 Zero-Knowledge Encryption: Server never sees your decrypted data

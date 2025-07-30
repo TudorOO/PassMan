@@ -62,13 +62,18 @@ cp .env.example .env
 
 # Run the app
 python3 main.py
+```
+---
 
-🐳 Docker Setup (Recommended)
+### 🐳 Docker Setup (Recommended)
 
+If you prefer isolation and easier deployment, use Docker:
+
+```bash
 git clone https://github.com/TudorOO/PassMan.git
 cd PassMan
 
-Create a .env file in the root directory:
+Create a .env file in the root directory. Here’s an example:
 
 SECRET_KEY=my_secret_key
 MAIL_SERVER=smtp.gmail.com
@@ -118,3 +123,4 @@ PassMan is a security-focused project developed for learning, portfolio building
 📄 License
 
 MIT License — do what you want, just don't sell it as yours.
+

@@ -12,8 +12,6 @@ PassMan is a privacy-first, open-source password manager built with Flask, SQLit
 
 ## 📸 Screenshots
 
-> Place screenshots in `docs/screenshots/` and adjust paths below if needed.
-
 ### 🔐 Landing Page
 ![Landing Page](docs/screenshots/land.png)
 
@@ -24,7 +22,7 @@ PassMan is a privacy-first, open-source password manager built with Flask, SQLit
 ![TOTP](docs/screenshots/totp.png)
 
 ### 💾 Register
-![Register](docs/screenshots/backup.png)
+![Register](docs/screenshots/register.png)
 
 ### 💾 Dashboard
 ![Dashboard](docs/screenshots/dashboard.png)

@@ -47,31 +47,16 @@ PassMan is a privacy-first, open-source password manager built with Flask, SQLit
 
 ## 🚀 Setup
 
-### 🐍 Local Python Setup (Optional)
+### 🐳 Docker Setup (Recommended)
+
+If you prefer isolation and easier deployment, use Docker:
 
 ```bash
 git clone https://github.com/TudorOO/PassMan.git
 cd PassMan
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-
-# Set up environment variables
-cp .env.example .env
-# Then edit .env with your own secrets
-
-# Run the app
-python3 main.py
-
-🐳 Docker Setup (Recommended)
-
-If you prefer isolation and easier deployment, use Docker:
-
-git clone https://github.com/TudorOO/PassMan.git
-cd PassMan
-
+```
 Create a .env file in the root directory. Here’s an example:
-
+```bash
 SECRET_KEY=my_secret_key
 MAIL_SERVER=smtp.gmail.com
 MAIL_PORT=999
@@ -80,14 +65,16 @@ MAIL_PASSWORD=my_email_password
 AESGCM_CHECK_KEY=my_aesgcm (256 bits)
 AESGCM_META_KEY=my_aesgcm_meta
 AESGCM_META_NONCE=my_aesgcm_meta_nonce
-
+```
 Then build and run the container:
-
+```bash
 docker build -t passman .
 docker run --env-file .env -p 8000:8000 passman
+```
 
 Visit http://localhost:8000 in your browser.
-🧠 Security Highlights
+
+## 🧠 Security Highlights
 
     🔒 Zero-Knowledge Encryption: Server never sees your decrypted data
 
@@ -99,7 +86,7 @@ Visit http://localhost:8000 in your browser.
 
     📜 Content Security Policy: Basic headers set
 
-🛠️ Roadmap Ideas
+## 🛠️ Roadmap Ideas
 
     🔁 Password auto-rotation support
 
@@ -111,12 +98,12 @@ Visit http://localhost:8000 in your browser.
 
     🧾 Audit log for security events
 
-🤝 Contributing
+## 🤝 Contributing
 
 Pull requests and suggestions are always welcome! Whether it's UI polish, crypto audits, or feature ideas — feel free to fork and submit a PR.
 ⚠️ Disclaimer
 
 PassMan is a security-focused project developed for learning, portfolio building, and personal use. While great care was taken with encryption and security, use at your own risk in production. Security audits are welcome.
-📄 License
+## 📄 License
 
 MIT License — do what you want, just don't sell it as yours.
